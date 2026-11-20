@@ -23,6 +23,7 @@ Extension code runs once per session. Code that must run once for the whole engi
 - `parameters`: a TypeBox schema. Arguments are validated against it before `execute` runs.
 - `execute(toolCallId, params, signal, onUpdate, ctx)`: returns `{ content, details }`. Throw to report a failure, or return `isError: true`.
 - `exposure`: how the model reaches the tool. `direct` (the default) is declared to the model and callable; `model-only` is declared but not callable from other tools; `codemode` is callable from Code Mode scripts and not declared to the model; `deferred` is like `codemode` but found only by tool search; `hidden` is registered but unreachable.
+- `scope`: set `scope: "main"` on a `ToolDefinition` to expose it only in main sessions. Leave it unset for normal session availability.
 - `annotations`: hints such as `readOnlyHint` and `openWorldHint`.
 - `access` (`@experimental`): what this tool does with the user's data. If the plugin declares `agzPlugin.access`, every tool it registers needs a non-empty list without repeats, drawn from `read`, `modify`, `send`, `delete` and `download` and limited to names in the manifest. `subagents` and `automations` are not tool access names. If the plugin omits `agzPlugin.access`, its tools must omit `access` too. An annotation is not an access declaration.
 - `outputSchema`: the JSON Schema of `structuredContent`, when the tool sets it.
@@ -34,6 +35,25 @@ Register tools with `agz.registerTool(tool)` or `agz.registerTools([...])`. When
 The fifth argument of `execute` is a `ToolContext`: the running session's context, plus `executeTool(name, args, options)`. `executeTool` runs another tool through the same validation, hooks and checks as a model call. It never rejects: an unknown tool, invalid arguments, a blocked call or a thrown error come back as `isError: true`.
 
 The context also has `ui` (dialogs and notifications), `hasUI`, `isSubagent`, `cwd`, `signal` (aborts when the user stops the turn), `isIdle()`, `isProjectTrusted()` and `abort()`. `isSubagent` is true for a subagent or workflow task, and false for a main session, bot or hidden sidebar session; it is independent of `hasUI`.
+
+### Run a package agent
+
+`ctx.agents` is experimental. It is available in a plugin tool in a main session if the manifest declares `permissions: ["agents"]`. Guard against it being absent and use `scope: "main"` for a tool whose job is to start an agent. Only the package's own [exclusive profile](./manifest.md#agent-definitions) can be started.
+
+`await ctx.agents.run({ agent, prompt, description, background?, timeoutMs?, answerReserveMs?, extendReadFor?, tools? })` takes these options:
+
+| Option | Rule |
+|---|---|
+| `agent` | Required: local profile id, matching `^[a-z][a-z0-9-]{1,47}$`. The API first checks a non-blank string of at most 64 characters. |
+| `prompt` | Required: non-blank, at most 64,000 characters. |
+| `description` | Required: non-blank, at most 200 characters; shown to the user. |
+| `background` | Boolean, default `false`. In the background the answer goes to the calling session's mailbox. A foreground run also follows the calling tool's abort signal. |
+| `timeoutMs` | Integer from 1 to 900,000; default 360,000. Applies in either mode. |
+| `answerReserveMs` | Integer from 0 to `timeoutMs`; default 0. A positive value asks the agent to wrap up this many milliseconds before the deadline. |
+| `extendReadFor` | `{ paths, ms }`: at most 32 non-empty path strings and an integer from 0 to 60,000 ms. A read of one of those paths can postpone the wrap-up request once, not the hard deadline. |
+| `tools` | At most 32 run-only `ToolDefinition`s declared by name in the profile. Each must have `execute` and a unique `<prefix>_<name>` (at most 64 characters total). Replace each non-alphanumeric character in the plugin id with `_` to get the prefix; the suffix matches `^[a-z][A-Za-z0-9_]*$`. |
+
+The result is `{ status, text, sessionId? }`. `completed` returns the answer; `partial` returns available text at the deadline; `timeout` and `empty` have no text. `started` is a background run acknowledgement with empty text, not an answer. Invalid options, denied runs and foreground cancellation can reject the promise. To display returned text on an [agent card](./manifest.md#settings-views-and-bot-templates), pass the result through in the tool's `details` and use a Markdown section bound to `text`.
 
 ## Tool access and approval
 

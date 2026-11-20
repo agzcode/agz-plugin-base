@@ -46,7 +46,7 @@ Geçen bir çalıştırma; burada `skill+extension` türündeki bir eklenti içi
 ```text
 agz plugin check: /home/me/notes-helper
   manifest    passed
-  engines     passed  agz-plugin-sdk ^1 (installed 1.3.0)
+  engines     passed  agz-plugin-sdk ^1 (installed 1.4.0)
   typecheck   passed
   package     passed (9 files)
 check passed

@@ -222,7 +222,9 @@ Dosyayı reddetmeyen uyarılar: `<yol>: new id <kimlik> is declared in all and i
 
 `"scope": "project"` taşıyan alan proje kapsamlıdır: güvenilen bir proje bu alanın kendi değerini `<proje>/.agz-code/plugin-config/<anahtar>.json` dosyasında tutabilir ve o projenin oturumlarında bu değer kullanıcının değerinin önüne geçer. `getPluginSettings()` oturumun projesi için geçerli değeri döndürür; uzantı onu öteki alanlar gibi okur. `scope` yalnız `"project"` değerini alır ve `secret` alanında kullanılamaz. Bunu depodan depoya değişen şeyler için kullan: bir komut, bir yol, bir adlandırma kuralı.
 
-`ui.views`, uzantının `registerView` ile kaydettiği görünümleri bildirir. Bir görünümün `id` değeri (1 ile 64 küçük harf, rakam, `.`, `_` ya da `-`; benzersiz), `title` metni, `icon` değeri (sabit bir listeden lucide adı; değer yanlışsa `manifest_check` listeyi söyler) ve `place` değeri vardır: `panel` (oturumun sağ panelinde bir görünüm), `sidebar` (projenin uygulama kenar çubuğunda bir sayfa), `composer` (oturumun mesaj kutusunun üstünde küçük bir çubuk; uzantı onu `panel`de olduğu gibi `registerView` ile kaydeder ve gösterecek bir şeyi olmayan görünüm hiçbir şey çizmez) ya da `statusbar` (uygulamanın durum çubuğunda bir öğe ve ondan açılan panel). `statusbar` görünümü bir oturuma değil motora aittir: onu [motor modülü](#motor-modulu) kaydeder, bu yüzden manifestte `engine` bulunmalıdır; `refreshSeconds` (1 ile 3600 arası tam sayı) alabilir: uygulamanın öğeyi gösterdiği sürece görünümü kaç saniyede bir yeniden isteyeceği. `ui.toolViews`, eklentinin kendi araçlarından birinin kartını süsler: `tool` (araç adı; benzersiz) ve isteğe bağlı `title`, `subject`, `facts` (en çok 8) ile `sections` (en çok 8). Her değer çağrıdan `from` (`args` ya da `result`) ve `key` (en çok 8 addan oluşan noktalı yol) ile okunur; bölümde ayrıca `as` bulunur (`text`, `json`, `kv` ya da `list`). Kart yine de tüm bağımsız değişkenleri ve sonucu gösterir.
+`ui.views`, uzantının `registerView` ile kaydettiği görünümleri bildirir. Bir görünümün `id` değeri (1 ile 64 küçük harf, rakam, `.`, `_` ya da `-`; benzersiz), `title` metni, `icon` değeri (sabit bir listeden lucide adı; değer yanlışsa `manifest_check` listeyi söyler) ve `place` değeri vardır: `panel` (oturumun sağ panelinde bir görünüm), `sidebar` (projenin uygulama kenar çubuğunda bir sayfa), `composer` (oturumun mesaj kutusunun üstünde küçük bir çubuk; uzantı onu `panel`de olduğu gibi `registerView` ile kaydeder ve gösterecek bir şeyi olmayan görünüm hiçbir şey çizmez) ya da `statusbar` (uygulamanın durum çubuğunda bir öğe ve ondan açılan panel). `statusbar` görünümü bir oturuma değil motora aittir: onu [motor modülü](#motor-modulu) kaydeder, bu yüzden manifestte `engine` bulunmalıdır; `refreshSeconds` (1 ile 3600 arası tam sayı) alabilir: uygulamanın öğeyi gösterdiği sürece görünümü kaç saniyede bir yeniden isteyeceği. `ui.toolViews`, eklentinin kendi araçlarından birinin kartını süsler: `tool` (araç adı; benzersiz) ve isteğe bağlı `card`, `title`, `subject`, `facts` (en çok 8) ile `sections` (en çok 8). `card: "agent"`, çağrıyı standart araç kartı yerine ajan kartı görünümüyle gösterir. Her değer çağrıdan `from` (`args` ya da `result`) ve `key` (en çok 8 addan oluşan noktalı yol) ile okunur; bölümde ayrıca `as` bulunur (`text`, `json`, `kv`, `list` ya da `markdown`). Bir metni (örneğin `result.text` alanındaki yanıtı) Markdown olarak göstermek için `as: "markdown"` kullanın. Kart yine de tüm bağımsız değişkenleri ve sonucu gösterir.
+
+Bir bilgi alanı, en çok 32 ham değeri `{ en, tr }` biçimindeki yerelleştirilmiş etiketlerle eşleyen `values` nesnesini alabilir. Her anahtar 1–64 karakter olmalıdır. Eşleşmeyen değer olduğu gibi gösterilir.
 
 ```json
 "ui": {
@@ -434,11 +436,11 @@ Alan bir beyandır: klasörü oluşturmaz ve erişim vermez. Eklentinin yeniden 
 | `notifications` | kullanıcıya bildirim gönderir |
 | `usage` | sağlayıcı kotalarını ve kullanım sayılarını okur |
 | `automations` | kullanıcının kural ve hedef seçtiği otomasyonlara olay sağlar |
-| `agents` | kendi arka plan ajanlarını başlatır ve yardımcı kaydeder |
+| `agents` | kendine özel ajan profillerini `ctx.agents.run` ile çalıştırır ve yardımcı kaydeder |
 | `designer` | güvenilen oturum projesinin tasarım önizlemesini gösterir |
 | `providers` | model ekler; kullanıldığında konuşma belirtilen sağlayıcıya gider |
 
-Listede tekrar olmaz ve yalnız bu adlar bulunur. Ev sahibi `engine.notify`, `engine.quotas` ve `engine.automations.registerSource` gibi çağrılarda izni denetler. Bu denetimlerin dışında liste kullanıcıya verilen bir beyandır, kum havuzu değildir: eklenti kodu motorun sürecinde çalışır ve motor onu listeyle sınırlamaz (bkz. [Güvenlik](./security.md#izinler)). Eklentinin gerçekten yaptığını bildir. Bir şeyi dışarıda bırakan liste, eklentiyi kuranları yanıltır.
+Listede tekrar olmaz ve yalnız bu adlar bulunur. Ev sahibi `ctx.agents.run`, `engine.notify`, `engine.quotas` ve `engine.automations.registerSource` gibi çağrılarda izni denetler. Bu denetimlerin dışında liste kullanıcıya verilen bir beyandır, kum havuzu değildir: eklenti kodu motorun sürecinde çalışır ve motor onu listeyle sınırlamaz (bkz. [Güvenlik](./security.md#izinler)). Eklentinin gerçekten yaptığını bildir. Bir şeyi dışarıda bırakan liste, eklentiyi kuranları yanıltır.
 
 Motor, kullanıcının onayladığı listeyi kaydeder. Kurulu sürümde olmayan bir izin bildiren güncelleme, eklenen izinler için kullanıcının onayını bekler.
 
@@ -477,7 +479,7 @@ Açık manifest bağlayıcıdır. Atlanan ya da boş dizi olan kaynak alanı, o 
 
 ## Ajan tanımları
 
-`agents` içinde listelenen dosya bir alt ajan profilidir. Frontmatter bloklu Markdown'dır:
+`agzPlugin.agents` içinde listelenen dosya bir ajan profilidir. Frontmatter bloklu Markdown'dır:
 
 ```md
 ---
@@ -492,12 +494,15 @@ Review carefully.
 |---|---|
 | `name` | Zorunlu. Dosya adının `.md`'siz haline eşit olmalıdır. `^[a-z][a-z0-9-]{1,47}$` desenine uyar. Yerleşik bir ajanın kimliği olamaz. |
 | `description` | Zorunlu. En çok 160 karakter. |
-| `base` | Zorunlu. `explorer`, `researcher`, `worker`, `verifier`, `analyst` değerlerinden biri. |
-| `tools` | İsteğe bağlı liste. Temel ajanın araçlarının alt kümesi olmalıdır. |
+| `base` | Zorunlu. `explorer`, `researcher`, `worker`, `verifier`, `analyst` veya `answer`. `answer` için `exclusive: true` gerekir. |
+| `exclusive` | İsteğe bağlı mantıksal değer. `true` ise profili yalnızca sahibi olan paket [`ctx.agents.run`](./extension-api.md#paket-ajanini-calistirma) ile çalıştırabilir. Profil Ayarlar > Ajanlar'da görünür; alt ajan aracında ve iş akışlarında görünmez. |
+| `tools` | İsteğe bağlı liste. Temel ajanın araçlarından bir alt küme ve gerekiyorsa paketin koşuya özel araçları (aşağıya bakın). |
 | `steps` | İsteğe bağlı, 1 ile 200 arası tam sayı. |
 | `model`, `variant` | İsteğe bağlı, boş olmayan dizeler. |
 
-Frontmatter'dan sonraki metin, temel ajanın prompt'una Specialization başlığı altında eklenir. Başka her alan bir sorundur ve dosya kullanılmaz. Paket ajanının kimliği genel bir ajanla, bir proje ajanıyla ya da önceki bir paket ajanıyla aynıysa atlanır ve çakışma bildirilir. Proje kapsamlı eklentinin paket ajanları yalnız güvenilen projede yüklenir.
+İş profillerinde gövde, temel ajanın sistem istemine Specialization başlığı altında eklenir. `base: answer` için boş olmayan gövde **rol metninin kendisidir**: salt okunur ajan tek bir yanıt verir ve model havuzunu hiç kullanmaz. Varsayılan araçları `readJ`, `grepJ`, `globJ`, `memory_search`, `memory_read`, `skill_route` ve `skill_load`'dur. Bu kümeyi daraltmak veya koşuya özel araçlar kullanmak için istenen araçları profilin `tools` alanında listeleyin; paket ek `<prefix>_<name>` araç tanımlarını her koşuda verir. Yanıt profili varsayılan olarak 8 adım çalışır; son adımda araçlar kapatılır ve ajan yanıtını yazar.
+
+Başka her alan bir sorundur ve dosya kullanılmaz. Paket ajanının kimliği genel bir ajanla, bir proje ajanıyla ya da önceki bir paket ajanıyla aynıysa atlanır ve çakışma bildirilir. Proje kapsamlı eklentinin paket ajanları yalnız güvenilen projede yüklenir.
 
 ## Hatalar
 

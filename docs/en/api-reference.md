@@ -1,6 +1,6 @@
 # API reference
 
-The contract of `@agz-yazilim/plugin-sdk`, version 1.3.0: every name the package exports, with its signature and its TSDoc. Members of the host's own API object that are not listed here are outside the contract; see [compatibility](./compatibility.md).
+The contract of `@agz-yazilim/plugin-sdk`, version 1.4.0: every name the package exports, with its signature and its TSDoc. Members of the host's own API object that are not listed here are outside the contract; see [compatibility](./compatibility.md).
 
 ## Runtime
 
@@ -67,7 +67,7 @@ interface PluginModelProviderModel
 The version of this SDK, equal to the `version` of its package.json. A plugin's `engines["agz-plugin-sdk"]` range is checked against it. A new optional member of the contract is a minor version; removing or changing one is a major.
 
 ```ts
-declare const SDK_VERSION: "1.3.0";
+declare const SDK_VERSION: "1.4.0";
 ```
 
 ### Static
@@ -487,6 +487,10 @@ interface ToolDefinition<TParams extends TSchema = TSchema, TDetails = unknown>
 
   JSON Schema of `structuredContent` in successful results. A tool that declares it always sets `structuredContent`.
 
+- `scope?: "main"`
+
+  Restricts the tool to main sessions when set to `"main"`.
+
 - `exposure?: ToolExposure`
 
   How the model reaches the tool. Default: `"direct"`.
@@ -800,6 +804,90 @@ interface PluginToolAccounts
 
   Sends to a provider API origin; writes require an approval ticket.
 
+### PluginToolAgentRun
+
+> **Experimental: the API may change or be withdrawn in any release**
+
+Result of an agent run.
+
+```ts
+interface PluginToolAgentRun
+```
+
+**Members**
+
+- `status: "completed" | "empty" | "partial" | "started" | "timeout"`
+
+  The outcome, or started for a background run.
+
+- `text: string`
+
+  The answer, empty when started in the background.
+
+- `sessionId?: string`
+
+  The agent session identifier, when available.
+
+### PluginToolAgentRunOptions
+
+> **Experimental: the API may change or be withdrawn in any release**
+
+Options for running an agent from this plugin's package.
+
+```ts
+interface PluginToolAgentRunOptions
+```
+
+**Members**
+
+- `agent: string`
+
+  The package's agent identifier.
+
+- `prompt: string`
+
+  The task given to the agent.
+
+- `description: string`
+
+  A short description shown to the user.
+
+- `background?: boolean`
+
+  Return immediately and deliver the result as a background report.
+
+- `timeoutMs?: number`
+
+  Time limit in milliseconds (1..900000, default 360000).
+
+- `answerReserveMs?: number`
+
+  Time reserved for an answer, from 0 to timeoutMs; default 0.
+
+- `extendReadFor?: { paths: string[]; ms: number; }`
+
+  Paths whose read time may be extended, by up to 60000 milliseconds.
+
+- `tools?: ToolDefinition<TSchema, unknown>[]`
+
+  Up to 32 run-only tools named with the package prefix.
+
+### PluginToolAgents
+
+> **Experimental: the API may change or be withdrawn in any release**
+
+Runs agents declared by this plugin.
+
+```ts
+interface PluginToolAgents
+```
+
+**Members**
+
+- `run: (options: PluginToolAgentRunOptions) => Promise<PluginToolAgentRun>`
+
+  Starts a run; a foreground run follows the calling tool's abort signal.
+
 ### PluginUIContext
 
 The user interface a plugin can ask for. Every method needs PluginContext.hasUI: without a user interface the dialogs resolve to their empty answer (`false`, `undefined`) and `notify` shows nothing.
@@ -863,6 +951,12 @@ interface ToolContext extends PluginContext
   > **Experimental: the API may change or be withdrawn in any release**
 
   Declared accounts, when available from the host.
+
+- `agents?: PluginToolAgents`
+
+  > **Experimental: the API may change or be withdrawn in any release**
+
+  Package agent runs, in a main session with the agents permission.
 
 - `access: { approve(request: AccessRequest): Promise<AccessTicket>; check(): void; }`
 
@@ -2033,6 +2127,10 @@ interface PluginToolView
 
   The name of the tool this decorates.
 
+- `card?: "agent"`
+
+  Draws and groups the tool as an agent card.
+
 - `title?: LocalizedText`
 
   The card's title.
@@ -2041,9 +2139,9 @@ interface PluginToolView
 
   A short subject line.
 
-- `facts?: { label: LocalizedText; from: PluginToolViewSource; key: string; }[]`
+- `facts?: { label: LocalizedText; from: PluginToolViewSource; key: string; values?: Record<string, LocalizedText> | undefined; }[]`
 
-  Label and value pairs.
+  Label and value pairs. `values` maps up to 32 raw values (keys of 1–64 characters) to localized labels; unmatched values are shown as they are.
 
 - `sections?: { label: LocalizedText; from: PluginToolViewSource; key: string; as: PluginToolViewSectionAs; }[]`
 
@@ -2054,7 +2152,7 @@ interface PluginToolView
 How a tool card section draws its value.
 
 ```ts
-type PluginToolViewSectionAs = "text" | "json" | "kv" | "list"
+type PluginToolViewSectionAs = "text" | "json" | "kv" | "list" | "markdown"
 ```
 
 ### PluginToolViewSource

@@ -32,8 +32,8 @@ The manifest, from the skill template:
 		"test": "agz plugin test"
 	},
 	"devDependencies": {
-		"@agz-yazilim/plugin-kit": "1.3.0",
-		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@agz-yazilim/plugin-kit": "1.4.0",
+		"@agz-yazilim/plugin-sdk": "1.4.0",
 		"@types/node": "22.19.19",
 		"typescript": "7.0.2"
 	},

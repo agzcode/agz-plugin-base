@@ -222,7 +222,9 @@ Three fields add what the user sees and fills in. None of them runs plugin code 
 
 A field with `"scope": "project"` is project-scoped: a trusted project may keep its own value of it, in `<project>/.agz-code/plugin-config/<key>.json`, and that value wins over the user's value in the sessions of that project. `getPluginSettings()` returns the value that applies to the session's project, so the extension reads it like any other field. `"project"` is the only value `scope` takes, and a `secret` field cannot have it. Use it for what differs between repositories, such as a command, a path or a naming rule.
 
-`ui.views` declares the views the extension registers with `registerView`. A view has an `id` (1 to 64 lowercase letters, digits, `.`, `_` or `-`; unique), a `title`, an `icon` (a lucide name from a fixed list; `manifest_check` names the list when the value is wrong) and a `place`: `panel` (a view in the session's right panel), `sidebar` (a page in the app's sidebar for the project), `composer` (a compact bar above the session's composer; the extension registers it with `registerView`, as for `panel`, and a view with nothing to show draws nothing) or `statusbar` (an item in the app's status bar with a panel that opens from it). A `statusbar` view belongs to the engine, not to a session: the [engine module](#engine-module) registers it, so the manifest needs `engine`, and it may have `refreshSeconds` (a whole number from 1 to 3600): how often the app asks for the view again while it shows the item. `ui.toolViews` decorates the card of one of the plugin's own tools: `tool` (the tool name; unique), and any of `title`, `subject`, `facts` (at most 8) and `sections` (at most 8). Each value is read from the call with `from` (`args` or `result`) and `key` (a dotted path of at most 8 names); a section also has `as` (`text`, `json`, `kv` or `list`). The card still shows the full arguments and result.
+`ui.views` declares the views the extension registers with `registerView`. A view has an `id` (1 to 64 lowercase letters, digits, `.`, `_` or `-`; unique), a `title`, an `icon` (a lucide name from a fixed list; `manifest_check` names the list when the value is wrong) and a `place`: `panel` (a view in the session's right panel), `sidebar` (a page in the app's sidebar for the project), `composer` (a compact bar above the session's composer; the extension registers it with `registerView`, as for `panel`, and a view with nothing to show draws nothing) or `statusbar` (an item in the app's status bar with a panel that opens from it). A `statusbar` view belongs to the engine, not to a session: the [engine module](#engine-module) registers it, so the manifest needs `engine`, and it may have `refreshSeconds` (a whole number from 1 to 3600): how often the app asks for the view again while it shows the item. `ui.toolViews` decorates the card of one of the plugin's own tools: `tool` (the tool name; unique), and any of `card`, `title`, `subject`, `facts` (at most 8) and `sections` (at most 8). Set `card: "agent"` to display calls with the agent card style instead of the standard tool card. Each value is read from the call with `from` (`args` or `result`) and `key` (a dotted path of at most 8 names); a section also has `as` (`text`, `json`, `kv`, `list` or `markdown`). Use `as: "markdown"` to render a string as Markdown, for example the answer at `result.text`. The card still shows the full arguments and result.
+
+A fact may have `values`, an object mapping up to 32 raw values to localized `{ en, tr }` labels. Each key must contain 1–64 characters. An unmatched value is shown unchanged.
 
 ```json
 "ui": {
@@ -434,11 +436,11 @@ The field is a statement: it does not create the folder and gives no access. Wha
 | `notifications` | notifies the user |
 | `usage` | reads the provider quotas and usage figures |
 | `automations` | supplies events to rules and targets the user configures |
-| `agents` | starts its own background agents and registers helpers |
+| `agents` | runs its own exclusive agent profiles with `ctx.agents.run` and registers helpers |
 | `designer` | shows a preview of the trusted session project's design |
 | `providers` | adds models; when used, the conversation goes to the named provider |
 
-The list has no repeats and only these names. The host checks permissions on calls such as `engine.notify`, `engine.quotas`, and `engine.automations.registerSource`. Beyond those checks the list is a statement to the user, not a sandbox: plugin code runs in the engine's process and the engine does not hold it to the list (see [Security](./security.md#permissions)). Declare what the plugin really does. A list that leaves something out misleads the people who install the plugin.
+The list has no repeats and only these names. The host checks permissions on calls such as `ctx.agents.run`, `engine.notify`, `engine.quotas`, and `engine.automations.registerSource`. Beyond those checks the list is a statement to the user, not a sandbox: plugin code runs in the engine's process and the engine does not hold it to the list (see [Security](./security.md#permissions)). Declare what the plugin really does. A list that leaves something out misleads the people who install the plugin.
 
 The engine records the list the user confirmed. An update that declares a permission the installed version did not have waits for the user's confirmation of the added ones.
 
@@ -477,7 +479,7 @@ A package without an `agzPlugin` key uses folders at the package root, named aft
 
 ## Agent definitions
 
-A file listed in `agents` is a subagent profile. It is Markdown with a frontmatter block:
+A file listed in `agzPlugin.agents` is an agent profile. It is Markdown with a frontmatter block:
 
 ```md
 ---
@@ -492,12 +494,15 @@ Review carefully.
 |---|---|
 | `name` | Required. Must equal the file name without `.md`. Matches `^[a-z][a-z0-9-]{1,47}$`. It cannot be the id of a built-in agent. |
 | `description` | Required. At most 160 characters. |
-| `base` | Required. One of `explorer`, `researcher`, `worker`, `verifier`, `analyst`. |
-| `tools` | Optional list. Must be a subset of the base agent's tools. |
+| `base` | Required. One of `explorer`, `researcher`, `worker`, `verifier`, `analyst` or `answer`. `answer` requires `exclusive: true`. |
+| `exclusive` | Optional boolean. With `true`, only the owning package can run the profile, via [`ctx.agents.run`](./extension-api.md#run-a-package-agent). It appears in Settings > Agents, not in the subagent tool or workflows. |
+| `tools` | Optional list. Use a subset of the base's tools and, if needed, the package's own named run tools (see below). |
 | `steps` | Optional integer from 1 to 200. |
 | `model`, `variant` | Optional non-empty strings. |
 
-The text after the frontmatter is added to the base agent's prompt under a Specialization heading. Any other field is an issue and the file is not used. If a package agent has the same id as a global agent, a project agent or an earlier package agent, it is skipped and the conflict is reported. Package agents from a project-scope plugin load only in a trusted project.
+For a work base, the body is added to the base's prompt under Specialization. For `base: answer`, the non-empty body **is** the role text: the read-only agent gives one answer and never uses the model pool. Its default tools are `readJ`, `grepJ`, `globJ`, `memory_search`, `memory_read`, `skill_route` and `skill_load`. To narrow that set or use package-specific run tools, list the desired tools in the profile's `tools`; the package supplies those additional `<prefix>_<name>` tool definitions for each run. An answering profile defaults to 8 steps, with tools off on the last step so it can write its answer.
+
+Any other field is an issue and the file is not used. If a package agent has the same id as a global agent, a project agent or an earlier package agent, it is skipped and the conflict is reported. Package agents from a project-scope plugin load only in a trusted project.
 
 ## Errors
 

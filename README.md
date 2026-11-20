@@ -13,7 +13,7 @@ You need Node.js 22.19 or newer and the AGZ Code desktop app.
 ```sh
 mkdir my-work && cd my-work
 npm init -y
-npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.3.0
+npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.4.0
 npx agz plugin create notes-helper --id acme/notes-helper
 cd notes-helper
 npm install --ignore-scripts
@@ -65,7 +65,9 @@ English is in [`docs/en`](./docs/en), Turkish in [`docs/tr`](./docs/tr). The sam
 
 ## Versions
 
-The templates and examples use npm releases [`@agz-yazilim/plugin-sdk@1.3.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-sdk/v/1.3.0) and [`@agz-yazilim/plugin-kit@1.3.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-kit/v/1.3.0). For desktop interface modules, use [`@agz-yazilim/plugin-ui@0.1.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-ui/v/0.1.0). All three are MIT licensed. The host's SDK must satisfy the plugin's `engines["agz-plugin-sdk"]` range; see [Compatibility](./docs/en/compatibility.md).
+The templates and examples use npm releases [`@agz-yazilim/plugin-sdk@1.4.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-sdk/v/1.4.0) and [`@agz-yazilim/plugin-kit@1.4.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-kit/v/1.4.0). For desktop interface modules, use [`@agz-yazilim/plugin-ui@0.1.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-ui/v/0.1.0). All three are MIT licensed. The host's SDK must satisfy the plugin's `engines["agz-plugin-sdk"]` range; see [Compatibility](./docs/en/compatibility.md).
+
+SDK 1.4.0 adds tools limited to the main session (`scope: "main"`), package agent runs with [`ctx.agents.run`](./docs/en/extension-api.md#run-a-package-agent), exclusive and answer-only package agent profiles ([agent definitions](./docs/en/manifest.md#agent-definitions)) and agent-style tool cards (`card: "agent"`, sections with `as: "markdown"`). Kit 1.4.0's mock host simulates agent runs: give `createMockHost` an `agents` responder and read the validated calls from `host.agentRuns`. A plugin that uses one of these declares `^1.4.0`.
 
 The [overview](./docs/en/overview.md#engine-and-desktop-contributions) also covers desktop UI modules, status bar views, native subprocesses, background helpers, model providers and notifications. [Publishing to the catalog](./docs/en/testing-packaging.md#signed-releases-in-the-public-catalog) requires operator approval; publishing a package on npm or Git does not list it in the catalog.
 

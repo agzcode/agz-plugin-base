@@ -6,7 +6,7 @@ Keep your standing rules in the `AGENTS.md` files, not in memory. Memory holds k
 
 ## What is recorded
 
-The lead and the bots can write records. The worker can write too. The explorer, analyst, researcher, advisor and verifier only read and search.
+The lead and the bots can write records. The worker can write too. The explorer, analyst, researcher and verifier only read and search. A plugin's answering agent can also read and search general memory during its run, but cannot write records.
 
 You see records and the links between them on the Memory page, and you can edit them. The memory maintenance bot merges duplicates and corrects outdated records.
 

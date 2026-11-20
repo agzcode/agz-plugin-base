@@ -6,7 +6,7 @@ Kalıcı kurallarını hafızaya değil `AGENTS.md` dosyalarına yaz. Hafıza bi
 
 ## Ne kaydedilir
 
-Lider ve botlar kayıt yazabilir. İşçi de yazabilir. Keşifçi, analist, araştırmacı, danışman ve doğrulayıcı yalnız okur ve arar.
+Lider ve botlar kayıt yazabilir. İşçi de yazabilir. Keşifçi, analist, araştırmacı ve doğrulayıcı yalnız okur ve arar. Eklentinin yanıt ajanı da çalıştığı sürece genel hafızayı okuyup arayabilir, ancak kayıt yazamaz.
 
 Kayıtları Hafıza sayfasında görür, düzenler ve birbirine bağlarsın. Hafıza bakım botu kopyaları birleştirir, eskimiş kayıtları düzeltir.
 

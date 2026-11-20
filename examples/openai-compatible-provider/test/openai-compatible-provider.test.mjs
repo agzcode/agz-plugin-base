@@ -321,7 +321,7 @@ describe("the manifest", () => {
 	});
 
 	it("targets the SDK version that has the provider port", () => {
-		// The port is not in a published SDK yet: ^1.3.0 is the first release that has it, so a host before it refuses
+		// SDK 1.3.0 is the first release that has the port, so a host before it refuses
 		// the plugin by its range instead of loading it without models.
 		assert.equal(packageJson.engines["agz-plugin-sdk"], "^1.3.0");
 	});

@@ -14,9 +14,10 @@ Uzmanlar başka uzman çağıramaz ve başka bir oturuma erişemez. Yalnız lide
 | analyst (analist) | Veriyi, günlükleri ve kodu ölçerek yanıtlar; betiklerini sonradan yeniden çalıştırmak için saklar | Hayır |
 | worker (işçi) | Sınırlı bir değişikliği yapar, projenin denetimlerini çalıştırır ve kanıtla bildirir | Evet |
 | verifier (doğrulayıcı) | Teslimi kullanıcının gözüyle sınar; her ölçütü ekran görüntüleriyle puanlar. Teslimi değiştirmez | Hayır |
-| advisor (danışman) | Liderin ikinci görüşü: kodu ve hafızayı okur, salt okunur öneri verir. Web'de aramaz ve yalnız lider çağırır | Hayır |
 
 Beceri geliştirici ve beceri bakımcısı adlı iki yardımcı ajan da vardır. Birincisi, beceri devirlerini sınanmış becerilere çevirir; ikincisi var olan becerileri onarır ya da birleştirir.
+
+Bir eklenti ikinci görüş için salt okunur bir danışman sunabilir. Eklentiye özel ajan Ayarlar > Ajanlar'da görünür. Onu yalnızca kendi eklentisi, bir eklenti aracıyla başlatabilir; alt ajan aracı ve iş akışı görevleri bu ajanı başlatamaz. Bkz. [Ajan tanımları](./manifest.md#ajan-tanimlari).
 
 ## İş akışları ve paralel iş
 

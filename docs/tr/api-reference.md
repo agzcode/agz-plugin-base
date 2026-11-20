@@ -1,6 +1,6 @@
 # API referansı
 
-`@agz-yazilim/plugin-sdk` sözleşmesi, sürüm 1.3.0: paketin dışa aktardığı her ad, imzası ve TSDoc açıklamasıyla. Burada yer almayan ev sahibi API nesnesi üyeleri sözleşmenin dışındadır; bkz. [uyumluluk](./compatibility.md).
+`@agz-yazilim/plugin-sdk` sözleşmesi, sürüm 1.4.0: paketin dışa aktardığı her ad, imzası ve TSDoc açıklamasıyla. Burada yer almayan ev sahibi API nesnesi üyeleri sözleşmenin dışındadır; bkz. [uyumluluk](./compatibility.md).
 
 ## Çalışma zamanı
 
@@ -67,7 +67,7 @@ interface PluginModelProviderModel
 Bu SDK'nın sürümü; `package.json` dosyasının `version` alanıyla aynıdır. Bir eklentinin `engines["agz-plugin-sdk"]` aralığı buna göre denetlenir. Sözleşmeye eklenen yeni isteğe bağlı bir üye küçük sürüm; bir üyeyi kaldırmak ya da değiştirmek büyük sürümdür.
 
 ```ts
-declare const SDK_VERSION: "1.3.0";
+declare const SDK_VERSION: "1.4.0";
 ```
 
 ### Static
@@ -487,6 +487,10 @@ interface ToolDefinition<TParams extends TSchema = TSchema, TDetails = unknown>
 
   Başarılı sonuçlardaki `structuredContent` değerinin JSON Schema'sı. Bunu bildiren bir araç her zaman `structuredContent` değerini ayarlar.
 
+- `scope?: "main"`
+
+  main olduğunda araç yalnız ana oturumlarda kullanılabilir.
+
 - `exposure?: ToolExposure`
 
   Modelin araca hangi yoldan ulaştığı. Varsayılan: `"direct"`.
@@ -800,6 +804,90 @@ interface PluginToolAccounts
 
   Sağlayıcının API kökenine istek gönderir; yazma için onay belgesi gerekir.
 
+### PluginToolAgentRun
+
+> **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+Ajan koşusunun sonucu.
+
+```ts
+interface PluginToolAgentRun
+```
+
+**Üyeler**
+
+- `status: "completed" | "empty" | "partial" | "started" | "timeout"`
+
+  Sonuç durumu veya arka plan koşusu için started.
+
+- `text: string`
+
+  Yanıt; arka plan koşusu başladığında boş.
+
+- `sessionId?: string`
+
+  Varsa ajan oturumunun kimliği.
+
+### PluginToolAgentRunOptions
+
+> **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+Paket ajanı çalıştırma seçenekleri.
+
+```ts
+interface PluginToolAgentRunOptions
+```
+
+**Üyeler**
+
+- `agent: string`
+
+  Paketin ajan kimliği.
+
+- `prompt: string`
+
+  Ajana verilen görev.
+
+- `description: string`
+
+  Kullanıcıya gösterilen kısa açıklama.
+
+- `background?: boolean`
+
+  Hemen döner ve sonucu arka plan raporu olarak sunar.
+
+- `timeoutMs?: number`
+
+  Milisaniye cinsinden süre sınırı (1..900000, varsayılan 360000).
+
+- `answerReserveMs?: number`
+
+  Yanıt için ayrılan süre; 0 ile timeoutMs arasında, varsayılan 0.
+
+- `extendReadFor?: { paths: string[]; ms: number; }`
+
+  Okuma süresi en çok 60000 milisaniye uzatılacak yollar.
+
+- `tools?: ToolDefinition<TSchema, unknown>[]`
+
+  Paket önekli, yalnız bu koşuda kullanılacak en çok 32 araç.
+
+### PluginToolAgents
+
+> **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+Bu eklentinin bildirdiği ajanları çalıştırır.
+
+```ts
+interface PluginToolAgents
+```
+
+**Üyeler**
+
+- `run: (options: PluginToolAgentRunOptions) => Promise<PluginToolAgentRun>`
+
+  Bir koşu başlatır; ön plan koşusu çağıran aracın iptal sinyalini izler.
+
 ### PluginUIContext
 
 Eklentinin isteyebileceği kullanıcı arayüzü. Her yöntem `PluginContext.hasUI` gerektirir: kullanıcı arayüzü yoksa diyaloglar boş yanıtlarına (`false`, `undefined`) çözülür ve `notify` hiçbir şey göstermez.
@@ -863,6 +951,12 @@ interface ToolContext extends PluginContext
   > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
 
   Ev sahibi sunduğunda bildirilen hesaplar.
+
+- `agents?: PluginToolAgents`
+
+  > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+  agents izniyle ana oturumda paket ajanlarını çalıştırır.
 
 - `access: { approve(request: AccessRequest): Promise<AccessTicket>; check(): void; }`
 
@@ -2029,6 +2123,10 @@ interface PluginToolView
 
   Süslediği aracın adı.
 
+- `card?: "agent"`
+
+  Aracı ajan kartı olarak çizer ve gruplar.
+
 - `title?: LocalizedText`
 
   Kartın başlığı.
@@ -2037,9 +2135,9 @@ interface PluginToolView
 
   Kısa bir konu satırı.
 
-- `facts?: { label: LocalizedText; from: PluginToolViewSource; key: string; }[]`
+- `facts?: { label: LocalizedText; from: PluginToolViewSource; key: string; values?: Record<string, LocalizedText> | undefined; }[]`
 
-  Etiket ve değer çiftleri.
+  Etiket ve değer çiftleri. `values`, en çok 32 ham değeri (1–64 karakterlik anahtarlar) yerelleştirilmiş etiketlerle eşler; eşleşmeyen değerler olduğu gibi gösterilir.
 
 - `sections?: { label: LocalizedText; from: PluginToolViewSource; key: string; as: PluginToolViewSectionAs; }[]`
 
@@ -2050,7 +2148,7 @@ interface PluginToolView
 Bir araç kartı bölümünün değerini nasıl çizdiği.
 
 ```ts
-type PluginToolViewSectionAs = "text" | "json" | "kv" | "list"
+type PluginToolViewSectionAs = "text" | "json" | "kv" | "list" | "markdown"
 ```
 
 ### PluginToolViewSource

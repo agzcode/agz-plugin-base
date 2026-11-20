@@ -23,6 +23,7 @@ Uzantı kodu her oturumda bir kez çalışır. Bütün motor için bir kez çal�
 - `parameters`: bir TypeBox şeması. Argümanlar `execute` çalışmadan önce bunla doğrulanır.
 - `execute(toolCallId, params, signal, onUpdate, ctx)`: `{ content, details }` döndürür. Bir başarısızlığı bildirmek için fırlatın ya da `isError: true` döndürün.
 - `exposure`: modelin araca nasıl ulaştığı. `direct` (varsayılan) modele bildirilir ve çağrılabilir; `model-only` bildirilir ama diğer araçlardan çağrılamaz; `codemode` Code Mode betiklerinden çağrılabilir ve modele bildirilmez; `deferred`, `codemode` gibidir ama yalnızca araç aramasıyla bulunur; `hidden` kayıtlıdır ama ulaşılamaz.
+- `scope`: `ToolDefinition` içinde `scope: "main"` verildiğinde aracı yalnız ana oturumlar görür. Normal oturum kapsamı için alanı boş bırakın.
 - `annotations`: `readOnlyHint` ve `openWorldHint` gibi ipuçları.
 - `access` (`@experimental`): aracın kullanıcı verisiyle ne yaptığını bildirir. Eklenti `agzPlugin.access` bildiriyorsa kaydettiği her araç boş olmayan, tekrarsız bir liste vermelidir. Araç, `read`, `modify`, `send`, `delete` ve `download` adlarından yalnızca manifestte bulunanları seçebilir. `subagents` ve `automations` araç tanımına yazılmaz. Eklenti `agzPlugin.access` bildirmiyorsa araçları da `access` bildiremez. İpuçları erişim bildirimi yerine geçmez.
 - `outputSchema`: araç bunu ayarladığında `structuredContent` için JSON Şeması.
@@ -34,6 +35,25 @@ Araçları `agz.registerTool(araç)` ya da `agz.registerTools([...])` ile kayded
 `execute`un beşinci argümanı bir `ToolContext`tir: çalışan oturumun bağlamı ve `executeTool(ad, argümanlar, seçenekler)`. `executeTool`, başka bir aracı model çağrısındaki doğrulama, kanca ve denetimlerden geçirerek çalıştırır. Hiçbir zaman reddetmez: bilinmeyen araç, geçersiz argüman, engellenen çağrı ya da fırlatılan hata `isError: true` ile döner.
 
 Bağlamın ayrıca `ui` (diyaloglar ve bildirimler), `hasUI`, `isSubagent`, `cwd`, `signal` (kullanıcı turu durdurduğunda iptal olur), `isIdle()`, `isProjectTrusted()` ve `abort()` alanları vardır. `isSubagent` bir alt ajan veya iş akışı görevinde true, ana oturumda, botta ve gizli kenar çubuğu oturumunda false değerini alır; `hasUI` değerinden bağımsızdır.
+
+### Paket ajanını çalıştırma
+
+`ctx.agents` deneysel bir API'dir. Manifestte `permissions: ["agents"]` varsa ana oturumdaki eklenti aracına sunulur. Bağlamda olmayabileceğini denetleyin ve görevi ajan başlatmak olan araca `scope: "main"` verin. Yalnız paketin kendi [özel profili](./manifest.md#ajan-tanimlari) başlatılabilir.
+
+`await ctx.agents.run({ agent, prompt, description, background?, timeoutMs?, answerReserveMs?, extendReadFor?, tools? })` şu seçenekleri alır:
+
+| Seçenek | Kural |
+|---|---|
+| `agent` | Zorunlu: `^[a-z][a-z0-9-]{1,47}$` desenine uyan paket içi profil kimliği. API önce boş olmayan ve en çok 64 karakterlik bir dize olduğunu denetler. |
+| `prompt` | Zorunlu: boş olmayan, en çok 64.000 karakter. |
+| `description` | Zorunlu: boş olmayan, en çok 200 karakter; kullanıcıya gösterilir. |
+| `background` | Mantıksal değer, varsayılan `false`. Arka planda yanıt çağıran oturumun posta kutusuna gider. Ön plandaki koşu ayrıca çağıran aracın iptal sinyalini izler. |
+| `timeoutMs` | 1 ile 900.000 arası tam sayı; varsayılan 360.000. Ön planda da arka planda da geçerlidir. |
+| `answerReserveMs` | 0 ile `timeoutMs` arası tam sayı; varsayılan 0. Pozitifse son süreye bu kadar milisaniye kala ajandan yanıtı toparlaması istenir. |
+| `extendReadFor` | `{ paths, ms }`: en çok 32 boş olmayan yol dizesi ve 0 ile 60.000 arası tam sayı (milisaniye). Bu yollardan biri okunuyorsa toparlama isteği bir kez ertelenebilir; son süre değişmez. |
+| `tools` | Profilde adı geçen, koşuya özel en çok 32 `ToolDefinition`. Her birinin `execute` işlevi ve benzersiz `<prefix>_<name>` adı (toplam en çok 64 karakter) olmalı. Önek için eklenti kimliğindeki harf ve rakam dışındaki her karakteri `_` ile değiştirin; son ek `^[a-z][A-Za-z0-9_]*$` desenine uymalıdır. |
+
+Sonuç `{ status, text, sessionId? }` biçimindedir. `completed` yanıtı, `partial` son süreye dek yazılmış metni döndürür; `timeout` ve `empty` metin döndürmez. `started`, arka plan koşusunun başladığını bildirir; metni boştur, yanıt değildir. Geçersiz seçenekler, reddedilen koşular ve ön plandaki iptal çağrıyı hatayla sonlandırabilir. Yanıtı [ajan kartında](./manifest.md#ayarlar-gorunumler-ve-bot-sablonlari) göstermek için sonucu aracın `details` alanından verin ve `text` anahtarına bağlı bir Markdown bölümü kullanın.
 
 ## Araç erişimi ve onay
 

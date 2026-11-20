@@ -13,7 +13,7 @@ Boş bir klasörde önce `npm init -y` çalıştırın: orada bir `package.json`
 
 ```sh
 npm init -y
-npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.3.0
+npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.4.0
 npx agz plugin create notes-helper --kind skill+extension --id acme/notes-helper
 cd notes-helper
 npm install --ignore-scripts

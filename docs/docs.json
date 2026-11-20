@@ -25,8 +25,8 @@
 			"slug": "agents",
 			"title": { "en": "Agents", "tr": "Ajanlar" },
 			"summary": {
-				"en": "The lead, the specialist agents, the advisor, workflows, goals, the to-do list and bots.",
-				"tr": "Lider, uzman ajanlar, danışman, iş akışları, hedefler, yapılacaklar listesi ve botlar."
+				"en": "The lead, specialist and plugin agents, workflows, goals, the to-do list and bots.",
+				"tr": "Lider, uzman ve eklenti ajanları, iş akışları, hedefler, yapılacaklar listesi ve botlar."
 			}
 		},
 		{
@@ -73,16 +73,16 @@
 			"slug": "manifest",
 			"title": { "en": "The agzPlugin manifest", "tr": "agzPlugin manifesti" },
 			"summary": {
-				"en": "Every manifest field (the plugin id, settings, views, bot templates, the engine module, MCP servers, permissions), path rule and validation error.",
-				"tr": "Manifestin her alanı (eklenti kimliği, ayarlar, görünümler, bot şablonları, motor modülü, MCP sunucuları, izinler), yol kuralları ve doğrulama hataları."
+				"en": "Manifest fields, including exclusive agent profiles, agent cards, settings and permissions; path rules and validation errors.",
+				"tr": "Eklentiye özel ajan profilleri, ajan kartları, ayarlar ve izinler dahil manifest alanları; yol kuralları ve doğrulama hataları."
 			}
 		},
 		{
 			"slug": "extension-api",
 			"title": { "en": "Extension API", "tr": "Eklenti kodu API'si" },
 			"summary": {
-				"en": "Tools, hooks, commands, MCP servers, providers, UI calls, settings, plugin folders and views from @agz-yazilim/plugin-sdk.",
-				"tr": "@agz-yazilim/plugin-sdk ile araçlar, kancalar, komutlar, MCP sunucuları, sağlayıcılar, arayüz çağrıları, ayarlar, eklenti klasörleri ve görünümler."
+				"en": "Tools, package agent runs, hooks, commands, MCP servers, providers, UI calls, settings, plugin folders and views from @agz-yazilim/plugin-sdk.",
+				"tr": "@agz-yazilim/plugin-sdk ile araçlar, paket ajanı çalıştırma, kancalar, komutlar, MCP sunucuları, sağlayıcılar, arayüz çağrıları, ayarlar, eklenti klasörleri ve görünümler."
 			}
 		},
 		{

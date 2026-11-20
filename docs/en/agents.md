@@ -14,9 +14,10 @@ Specialists cannot start other specialists or reach another session. Only the le
 | analyst | Answers by measuring data, logs and code; keeps its scripts for a rerun | No |
 | worker | Makes one bounded change, runs the project's checks and reports with evidence | Yes |
 | verifier | Tests a delivery through the user's eyes and scores each criterion with screenshots. Does not change the delivery | No |
-| advisor | The lead's second opinion: reads code and memory and gives a read-only recommendation. Does not search the web; only the lead calls it | No |
 
 Two helper agents also exist: the skill developer turns skill handoffs into tested skills, and the skill maintainer repairs and merges existing skills.
+
+A plugin can provide a read-only agent for a second opinion. An exclusive plugin agent appears in Settings > Agents, but only its own plugin can start it, through a plugin tool, not as a workflow task or through the subagent tool. See [Agent definitions](./manifest.md#agent-definitions).
 
 ## Workflows and parallel work
 
