@@ -1,0 +1,42 @@
+{
+	"name": "my-plugin",
+	"version": "0.1.0",
+	"description": "A starting point for a plugin without code: an agent, a prompt, a bot template, a system prompt edit and an icon.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["agents", "prompts", "bots", "assets", "system-prompt.json", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1.1.0"
+	},
+	"scripts": {
+		"test": "agz plugin check"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "my-publisher/my-plugin",
+		"name": "My Plugin",
+		"description": "A starting point for a plugin without code: an agent, a prompt, a bot template, a system prompt edit and an icon.",
+		"publisher": "My Publisher",
+		"icon": "assets/icon.svg",
+		"agents": ["agents/my-plugin-reviewer.md"],
+		"prompts": ["prompts"],
+		"systemPrompt": "system-prompt.json",
+		"bots": [
+			{
+				"id": "reviewer",
+				"name": "my-plugin-bot",
+				"description": {
+					"en": "Reviews the changes of the project's current branch and reports what it found.",
+					"tr": "Projenin geçerli dalındaki değişiklikleri inceler ve bulduklarını bildirir."
+				},
+				"brief": "bots/reviewer.md",
+				"suggestedPermissions": "May read the project's files and its git history. Changes nothing.",
+				"suggestedApproval": "report"
+			}
+		]
+	}
+}

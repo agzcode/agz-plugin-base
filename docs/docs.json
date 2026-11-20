@@ -1,0 +1,177 @@
+{
+	"site": "https://code.agzyazilim.com",
+	"routes": {
+		"tr": "eklentiler/gelistirme/",
+		"en": "en/plugins/develop/"
+	},
+	"pages": [
+		{
+			"slug": "install",
+			"title": { "en": "Installation", "tr": "Kurulum" },
+			"summary": {
+				"en": "Installing on Linux, where the data lives, update channels and moving the data to another computer.",
+				"tr": "Linux'a kurulum, veri klasörü, güncelleme kanalları ve verileri başka bir makineye taşıma."
+			}
+		},
+		{
+			"slug": "first-session",
+			"title": { "en": "First session", "tr": "İlk oturum" },
+			"summary": {
+				"en": "The setup wizard: provider, main model, spending cap, approvals and project, then your first message.",
+				"tr": "Kurulum sihirbazı: sağlayıcı, ana model, harcama tavanı, onaylar ve proje; ardından ilk mesaj."
+			}
+		},
+		{
+			"slug": "agents",
+			"title": { "en": "Agents", "tr": "Ajanlar" },
+			"summary": {
+				"en": "The lead, the specialist agents, the advisor, workflows, goals, the to-do list and bots.",
+				"tr": "Lider, uzman ajanlar, danışman, iş akışları, hedefler, yapılacaklar listesi ve botlar."
+			}
+		},
+		{
+			"slug": "memory",
+			"title": { "en": "Memory", "tr": "Hafıza" },
+			"summary": {
+				"en": "What memory keeps, project and general scope, backups and restores, and a record's history.",
+				"tr": "Hafızanın neleri sakladığı, proje ve genel kapsam, yedekler, geri yükleme ve kaydın geçmişi."
+			}
+		},
+		{
+			"slug": "safety",
+			"title": { "en": "Security and approvals", "tr": "Güvenlik ve onaylar" },
+			"summary": {
+				"en": "Hidden credential files, the five approval classes, spending caps, file clashes between subagents, undo and a remote engine.",
+				"tr": "Gizlenen kimlik dosyaları, beş onay sınıfı, harcama tavanları, alt ajanlar arasında dosya çakışması, geri alma ve uzak motor."
+			}
+		},
+		{
+			"slug": "overview",
+			"title": { "en": "What a plugin is", "tr": "Eklenti nedir" },
+			"summary": {
+				"en": "What a plugin can add to AGZ Code, where it runs and how it is installed.",
+				"tr": "Bir eklentinin AGZ Code'a neler ekleyebildiği, nerede çalıştığı ve nasıl kurulduğu."
+			}
+		},
+		{
+			"slug": "quickstart",
+			"title": { "en": "Quickstart", "tr": "Hızlı başlangıç" },
+			"summary": {
+				"en": "Scaffold a plugin, link it from a local folder, reload and call its tool.",
+				"tr": "Eklenti iskeleti kur, yerel klasörden bağla, oturumu yenile ve aracını çağır."
+			}
+		},
+		{
+			"slug": "cli",
+			"title": { "en": "Command line: agz plugin", "tr": "Komut satırı: agz plugin" },
+			"summary": {
+				"en": "Create, check, test, pack and watch a plugin with the agz plugin command.",
+				"tr": "agz plugin komutuyla eklenti oluştur, denetle, test et, paketle ve geliştirirken izle."
+			}
+		},
+		{
+			"slug": "manifest",
+			"title": { "en": "The agzPlugin manifest", "tr": "agzPlugin manifesti" },
+			"summary": {
+				"en": "Every manifest field (the plugin id, settings, views, bot templates, the engine module, MCP servers, permissions), path rule and validation error.",
+				"tr": "Manifestin her alanı (eklenti kimliği, ayarlar, görünümler, bot şablonları, motor modülü, MCP sunucuları, izinler), yol kuralları ve doğrulama hataları."
+			}
+		},
+		{
+			"slug": "extension-api",
+			"title": { "en": "Extension API", "tr": "Eklenti kodu API'si" },
+			"summary": {
+				"en": "Tools, hooks, commands, MCP servers, providers, UI calls, settings, plugin folders and views from @agz-yazilim/plugin-sdk.",
+				"tr": "@agz-yazilim/plugin-sdk ile araçlar, kancalar, komutlar, MCP sunucuları, sağlayıcılar, arayüz çağrıları, ayarlar, eklenti klasörleri ve görünümler."
+			}
+		},
+		{
+			"slug": "storage",
+			"title": { "en": "Storage", "tr": "Depolama" },
+			"summary": {
+				"en": "The plugin store: where installed plugins, settings, secrets and a plugin's own data live, and what an uninstall removes.",
+				"tr": "Eklenti deposu: kurulu eklentilerin, ayarların, gizli değerlerin ve eklentinin kendi verisinin yeri; kaldırmanın neyi sildiği."
+			}
+		},
+		{
+			"slug": "skill-plugins",
+			"title": { "en": "Skill plugins", "tr": "Beceri eklentileri" },
+			"summary": {
+				"en": "Ship skills with JSON Schema tools that agents call directly or from Code Mode.",
+				"tr": "Ajanların doğrudan ya da Code Mode'dan çağırdığı JSON Schema araçlı beceriler yayımla."
+			}
+		},
+		{
+			"slug": "convert-feature",
+			"title": { "en": "Turn an existing feature into a plugin", "tr": "Var olan bir özelliği eklentiye çevirmek" },
+			"summary": {
+				"en": "Move a skill, a project tool or an MCP setup into a plugin package.",
+				"tr": "Bir beceriyi, proje aracını ya da MCP kurulumunu eklenti paketine taşı."
+			}
+		},
+		{
+			"slug": "new-feature",
+			"title": { "en": "Add a new feature as a plugin", "tr": "Yeni bir özelliği eklenti olarak eklemek" },
+			"summary": {
+				"en": "Choose between a skill and extension code, build it, test it and ship it.",
+				"tr": "Beceri ile eklenti kodu arasında seç, yaz, test et ve yayımla."
+			}
+		},
+		{
+			"slug": "convert-git-project",
+			"title": { "en": "Turn an existing Git project into a plugin", "tr": "Git'teki bir projeyi eklentiye çevirmek" },
+			"summary": {
+				"en": "Add a manifest to a repository, wrap its CLI or library as tools and install it from Git.",
+				"tr": "Bir depoya manifest ekle, CLI'ını ya da kütüphanesini araç olarak sar ve Git'ten kur."
+			}
+		},
+		{
+			"slug": "github",
+			"title": { "en": "Develop from GitHub", "tr": "GitHub'dan geliştirme" },
+			"summary": {
+				"en": "Install from a repository and ref, develop against a local clone and update.",
+				"tr": "Depo ve sürümden kur, yerel klonla geliştir ve güncelle."
+			}
+		},
+		{
+			"slug": "testing-packaging",
+			"title": { "en": "Test, package and publish", "tr": "Test, paketleme ve yayın" },
+			"summary": {
+				"en": "Check the manifest and package contents, write tests and publish.",
+				"tr": "Manifesti ve paket içeriğini denetle, test yaz ve yayımla."
+			}
+		},
+		{
+			"slug": "testing",
+			"title": { "en": "Testing a plugin", "tr": "Eklentiyi test etmek" },
+			"summary": {
+				"en": "Run a plugin's tools, hooks and views in a unit test with createMockHost.",
+				"tr": "createMockHost ile eklentinin araçlarını, kancalarını ve görünümlerini birim testte çalıştır."
+			}
+		},
+		{
+			"slug": "compatibility",
+			"title": { "en": "Compatibility", "tr": "Uyumluluk" },
+			"summary": {
+				"en": "The SDK version range, the SDK and kit versions, and what a mismatch does.",
+				"tr": "SDK sürüm aralığı, SDK ve kit sürümleri ve uyumsuzlukta ne olduğu."
+			}
+		},
+		{
+			"slug": "security",
+			"title": { "en": "Security", "tr": "Güvenlik" },
+			"summary": {
+				"en": "What a plugin can reach, declared permissions, secrets, install scripts, project trust and the credential shield.",
+				"tr": "Bir eklentinin neye erişebildiği, bildirilen izinler, gizli ayarlar, kurulum betikleri, proje güveni ve kimlik bilgisi kalkanı."
+			}
+		},
+		{
+			"slug": "examples",
+			"title": { "en": "Example plugins", "tr": "Örnek eklentiler" },
+			"summary": {
+				"en": "The templates and complete examples of the open agz-plugin-base repository, one for every kind of contribution.",
+				"tr": "Açık agz-plugin-base deposunun şablonları ve tam örnekleri; her katkı türü için bir tane."
+			}
+		}
+	]
+}

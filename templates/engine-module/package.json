@@ -1,0 +1,39 @@
+{
+	"name": "my-plugin",
+	"version": "0.1.0",
+	"description": "A starting point for a plugin with an engine module.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["engine", "extensions", "shared.ts", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1.1.0"
+	},
+	"scripts": {
+		"test": "agz plugin test"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@types/node": "22.19.19",
+		"typescript": "7.0.2"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "my-publisher/my-plugin",
+		"name": "My Plugin",
+		"description": "A starting point for a plugin with an engine module.",
+		"engine": "engine/index.ts",
+		"extensions": ["extensions/index.ts"],
+		"settings": [
+			{
+				"key": "intervalSeconds",
+				"type": "number",
+				"label": { "en": "Seconds between beats", "tr": "Vuruşlar arası saniye" },
+				"default": 60,
+				"min": 1,
+				"max": 3600,
+				"integer": true
+			}
+		]
+	}
+}

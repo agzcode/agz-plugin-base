@@ -1,0 +1,77 @@
+{
+	"name": "agz-example-commit-style",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Checks a commit message against the rules of the project the session works in.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["src", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1.1.0"
+	},
+	"scripts": {
+		"test": "agz plugin test"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@types/node": "22.19.19",
+		"typescript": "7.0.2"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "example/commit-style",
+		"name": "Commit Style",
+		"description": "Checks a commit message against the rules of the project the session works in.",
+		"extensions": ["src/index.ts"],
+		"settings": [
+			{
+				"key": "format",
+				"type": "enum",
+				"scope": "project",
+				"label": { "en": "Subject format", "tr": "Konu satırı biçimi" },
+				"description": {
+					"en": "Conventional: type(scope): subject. Plain: any one-line subject.",
+					"tr": "Conventional: type(scope): subject. Düz: tek satırlık herhangi bir konu."
+				},
+				"options": [
+					{ "value": "conventional", "label": { "en": "Conventional Commits", "tr": "Conventional Commits" } },
+					{ "value": "plain", "label": { "en": "Plain", "tr": "Düz" } }
+				],
+				"default": "conventional"
+			},
+			{
+				"key": "types",
+				"type": "string",
+				"scope": "project",
+				"label": { "en": "Allowed types", "tr": "İzin verilen türler" },
+				"description": {
+					"en": "For the conventional format: the types a subject may start with, separated by commas.",
+					"tr": "Conventional biçimi için: konunun başlayabileceği türler, virgülle ayrılmış."
+				},
+				"default": "feat, fix, docs, refactor, test, chore",
+				"maxLength": 300
+			},
+			{
+				"key": "maxSubjectLength",
+				"type": "number",
+				"scope": "project",
+				"label": { "en": "Longest subject", "tr": "En uzun konu satırı" },
+				"default": 72,
+				"min": 20,
+				"max": 200,
+				"integer": true
+			},
+			{
+				"key": "guardGitCommit",
+				"type": "boolean",
+				"label": { "en": "Refuse git commit with a bad message", "tr": "Hatalı iletili git commit'i reddet" },
+				"description": {
+					"en": "Blocks a bash command that runs git commit -m with a message that breaks the project's rules.",
+					"tr": "Projenin kurallarına uymayan bir iletiyle git commit -m çalıştıran bash komutunu engeller."
+				},
+				"default": false
+			}
+		]
+	}
+}

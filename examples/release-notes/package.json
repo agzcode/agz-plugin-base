@@ -1,0 +1,42 @@
+{
+	"name": "agz-example-release-notes",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Write release notes from the git history: a skill with a grouping tool, a system prompt rule and a bot template.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["skills", "bots", "system-prompt.json", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1"
+	},
+	"scripts": {
+		"test": "agz plugin test"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@types/node": "22.19.19",
+		"typescript": "7.0.2"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "release-notes",
+		"name": "Release Notes",
+		"description": "Write release notes from the git history: a skill with a grouping tool, a system prompt rule and a bot template.",
+		"skills": ["skills/release-notes"],
+		"systemPrompt": "system-prompt.json",
+		"bots": [
+			{
+				"id": "weekly-notes",
+				"name": "release-notes-bot",
+				"description": {
+					"en": "Drafts release notes from the project's git history and reports them for review.",
+					"tr": "Projenin git geçmişinden sürüm notlarını taslak olarak yazar ve incelemeniz için bildirir."
+				},
+				"brief": "bots/weekly-notes.md",
+				"suggestedPermissions": "May read the project's git history and the changelog file. Writes only the release notes file the user names.",
+				"suggestedApproval": "report"
+			}
+		]
+	}
+}

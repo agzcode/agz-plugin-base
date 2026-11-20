@@ -1,0 +1,28 @@
+{
+	"name": "my-plugin",
+	"version": "0.1.0",
+	"description": "A starting point for a plugin.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["skills", "extensions", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1"
+	},
+	"scripts": {
+		"test": "agz plugin test"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@types/node": "22.19.19",
+		"typescript": "7.0.2"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "my-plugin",
+		"name": "My Plugin",
+		"description": "A starting point for a plugin.",
+		"skills": ["skills/my-plugin"],
+		"extensions": ["extensions/index.ts"]
+	}
+}

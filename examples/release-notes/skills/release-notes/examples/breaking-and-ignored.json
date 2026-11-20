@@ -1,0 +1,12 @@
+{
+	"tool": "group_commits",
+	"name": "a breaking change comes first and housekeeping commits are only counted",
+	"input": { "subjects": ["chore: bump deps", "test(api): cover 503", "feat(api)!: drop the v1 routes", "fix: typo", "ci: cache npm"] },
+	"expected": {
+		"sections": [
+			{ "title": "Breaking changes", "items": ["**api:** drop the v1 routes"] },
+			{ "title": "Fixed", "items": ["typo"] }
+		],
+		"ignored": 3
+	}
+}

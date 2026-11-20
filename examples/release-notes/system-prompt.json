@@ -1,0 +1,10 @@
+{
+	"all": [
+		{
+			"op": "add",
+			"section": "working",
+			"id": "release-notes.grounding",
+			"text": "When asked for release notes or a changelog entry, load the release-notes skill. Write only changes that appear in the git history you read for the release; never add a change from memory or from a guess, and say so when the history is empty."
+		}
+	]
+}

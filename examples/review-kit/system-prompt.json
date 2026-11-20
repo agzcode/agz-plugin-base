@@ -1,0 +1,10 @@
+{
+	"all": [
+		{
+			"op": "add",
+			"section": "working",
+			"id": "review-kit.evidence",
+			"text": "- A review finding names its file and line and says how it was shown: the input, the command or the test. A suspicion you could not show is reported as a suspicion."
+		}
+	]
+}

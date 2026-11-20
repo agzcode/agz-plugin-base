@@ -1,0 +1,1 @@
+{ "tool": "count_words", "name": "empty text", "input": { "text": "" }, "expected": { "words": 0, "lines": 0, "characters": 0 } }

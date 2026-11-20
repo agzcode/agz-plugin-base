@@ -1,0 +1,71 @@
+{
+	"name": "agz-example-command-guard",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Block dangerous shell commands before the agent runs them, with rules you can switch off or extend.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["src", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1"
+	},
+	"scripts": {
+		"test": "agz plugin test"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@types/node": "22.19.19",
+		"typescript": "7.0.2"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "command-guard",
+		"name": "Command Guard",
+		"description": "Block dangerous shell commands before the agent runs them, with rules you can switch off or extend.",
+		"extensions": ["src/index.ts"],
+		"settings": [
+			{
+				"key": "mode",
+				"type": "enum",
+				"label": { "en": "When a rule matches", "tr": "Bir kural eşleşince" },
+				"options": [
+					{ "value": "block", "label": { "en": "Block the command", "tr": "Komutu engelle" } },
+					{ "value": "warn", "label": { "en": "Allow it and warn me", "tr": "İzin ver ve beni uyar" } }
+				],
+				"default": "block"
+			},
+			{
+				"key": "disabledRules",
+				"type": "string",
+				"label": { "en": "Rules to turn off", "tr": "Kapatılacak kurallar" },
+				"description": {
+					"en": "Comma-separated rule ids, for example git-reset-hard,chmod-777. Run /guard-rules to list the ids.",
+					"tr": "Virgülle ayrılmış kural kimlikleri, örneğin git-reset-hard,chmod-777. Kimlikleri görmek için /guard-rules çalıştırın."
+				},
+				"maxLength": 300
+			},
+			{
+				"key": "extraPattern",
+				"type": "string",
+				"label": { "en": "Extra pattern", "tr": "Ek desen" },
+				"description": {
+					"en": "A regular expression, matched ignoring case against the whole command, for example terraform\\s+destroy|kubectl\\s+delete.",
+					"tr": "Komutun tamamına büyük/küçük harf gözetmeden uygulanan bir düzenli ifade, örneğin terraform\\s+destroy|kubectl\\s+delete."
+				},
+				"maxLength": 500
+			},
+			{
+				"key": "shellTools",
+				"type": "string",
+				"label": { "en": "Shell tools to check", "tr": "Denetlenecek kabuk araçları" },
+				"description": {
+					"en": "Comma-separated names of the tools that run a shell command in their command argument.",
+					"tr": "Kabuk komutunu command argümanında alan araçların virgülle ayrılmış adları."
+				},
+				"default": "bash",
+				"maxLength": 200
+			}
+		]
+	}
+}

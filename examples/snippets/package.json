@@ -1,0 +1,28 @@
+{
+	"name": "agz-example-snippets",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Keeps named text snippets for the agent across sessions and projects, in the plugin's own data folder.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["src", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1.1.0"
+	},
+	"scripts": {
+		"test": "agz plugin test"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@types/node": "22.19.19",
+		"typescript": "7.0.2"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "example/snippets",
+		"name": "Snippets",
+		"description": "Keeps named text snippets for the agent across sessions and projects, in the plugin's own data folder.",
+		"extensions": ["src/index.ts"]
+	}
+}

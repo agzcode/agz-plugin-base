@@ -1,0 +1,16 @@
+{
+	"tool": "group_commits",
+	"name": "sections in order, with scopes",
+	"input": {
+		"subjects": ["fix(api): retry on 503", "feat(ui): dark theme", "docs: explain settings", "perf: cache the index", "feat(ui): sidebar search"]
+	},
+	"expected": {
+		"sections": [
+			{ "title": "Added", "items": ["**ui:** dark theme", "**ui:** sidebar search"] },
+			{ "title": "Fixed", "items": ["**api:** retry on 503"] },
+			{ "title": "Changed", "items": ["cache the index"] },
+			{ "title": "Documentation", "items": ["explain settings"] }
+		],
+		"ignored": 0
+	}
+}

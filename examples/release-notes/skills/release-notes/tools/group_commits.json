@@ -1,0 +1,36 @@
+{
+	"name": "group_commits",
+	"description": "Group Conventional Commit subjects into release notes. Types feat, fix, perf, refactor and docs get the sections Added, Fixed, Changed (perf and refactor) and Documentation; a breaking change (type! or a BREAKING CHANGE subject) is listed first; chore, test, ci, build and style commits are left out and counted; any other subject goes to Other. Identical lines appear once. Fails when subjects is missing or holds more than 2000 entries.",
+	"surface": "codemode",
+	"mutating": false,
+	"input": {
+		"type": "object",
+		"properties": {
+			"subjects": {
+				"type": "array",
+				"maxItems": 2000,
+				"items": { "type": "string", "maxLength": 500 },
+				"description": "Commit subjects, one string each, as printed by git log --format=%s."
+			}
+		},
+		"required": ["subjects"],
+		"additionalProperties": false
+	},
+	"output": {
+		"type": "object",
+		"properties": {
+			"markdown": { "type": "string" },
+			"sections": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": { "title": { "type": "string" }, "items": { "type": "array", "items": { "type": "string" } } },
+					"required": ["title", "items"]
+				}
+			},
+			"ignored": { "type": "integer" }
+		},
+		"required": ["markdown", "sections", "ignored"]
+	},
+	"run": { "kind": "script", "entry": "group_commits.mjs" }
+}

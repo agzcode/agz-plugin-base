@@ -1,0 +1,43 @@
+# CI for an AGZ Code plugin. Copy this file to .github/workflows/ci.yml in the plugin's own repository.
+#
+# It runs what you run before a release: the tests, the check (manifest, SDK range, types, package contents) and the
+# pack. The packed tarball is kept as an artifact, so a reviewer can install exactly what was checked.
+name: Plugin CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # The kit needs Node.js 22.19 or newer.
+          node-version: 22
+
+      # Without lifecycle scripts: a dependency's install script does not run on the CI machine.
+      # With a committed package-lock.json, use `npm ci --ignore-scripts` instead.
+      - run: npm install --ignore-scripts
+
+      # The plugin's own tests (agz plugin test, or agz plugin check for a plugin without code).
+      - run: npm test
+
+      # The manifest rules, the SDK range, tsc --noEmit and the files the package would ship.
+      - run: npx agz plugin check
+
+      # The check again, then npm pack: writes <name>-<version>.tgz into the folder.
+      - run: npx agz plugin pack
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugin-package
+          path: "*.tgz"
+          if-no-files-found: error

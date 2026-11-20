@@ -1,0 +1,60 @@
+{
+	"name": "agz-example-uptime-monitor",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Checks a list of URLs in the background and tells the agent which ones are down.",
+	"type": "module",
+	"license": "MIT",
+	"files": ["src", "README.md"],
+	"engines": {
+		"agz-plugin-sdk": "^1.1.0"
+	},
+	"scripts": {
+		"test": "agz plugin test"
+	},
+	"devDependencies": {
+		"@agz-yazilim/plugin-kit": "1.3.0",
+		"@agz-yazilim/plugin-sdk": "1.3.0",
+		"@types/node": "22.19.19",
+		"typescript": "7.0.2"
+	},
+	"agzPlugin": {
+		"schemaVersion": 1,
+		"id": "example/uptime-monitor",
+		"name": "Uptime Monitor",
+		"description": "Checks a list of URLs in the background and tells the agent which ones are down.",
+		"engine": "src/engine.ts",
+		"extensions": ["src/index.ts"],
+		"permissions": ["network"],
+		"settings": [
+			{
+				"key": "urls",
+				"type": "string",
+				"label": { "en": "URLs to check", "tr": "Denetlenecek adresler" },
+				"description": {
+					"en": "http or https addresses separated by commas or spaces, at most 20. Do not put credentials in a URL.",
+					"tr": "Virgül ya da boşlukla ayrılmış http ya da https adresleri, en çok 20. Adrese kimlik bilgisi yazmayın."
+				},
+				"maxLength": 4000
+			},
+			{
+				"key": "intervalSeconds",
+				"type": "number",
+				"label": { "en": "Seconds between checks", "tr": "Denetimler arası saniye" },
+				"default": 300,
+				"min": 30,
+				"max": 86400,
+				"integer": true
+			},
+			{
+				"key": "timeoutSeconds",
+				"type": "number",
+				"label": { "en": "Seconds to wait for an answer", "tr": "Yanıt için beklenecek saniye" },
+				"default": 10,
+				"min": 1,
+				"max": 60,
+				"integer": true
+			}
+		]
+	}
+}

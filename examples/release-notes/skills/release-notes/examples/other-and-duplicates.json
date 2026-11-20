@@ -1,0 +1,12 @@
+{
+	"tool": "group_commits",
+	"name": "a subject that is not a Conventional Commit goes to Other, and repeats appear once",
+	"input": { "subjects": ["Merge branch 'main'", "fix: typo", "fix: typo", "", "revert: undo the cache"] },
+	"expected": {
+		"sections": [
+			{ "title": "Fixed", "items": ["typo"] },
+			{ "title": "Other", "items": ["Merge branch 'main'", "revert: undo the cache"] }
+		],
+		"ignored": 0
+	}
+}

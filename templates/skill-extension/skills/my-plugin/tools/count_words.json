@@ -1,0 +1,22 @@
+{
+	"name": "count_words",
+	"description": "Count the words, lines and characters of a text. Words are runs of non-space characters, lines are separated by line breaks, characters are Unicode code points. Fails when text is missing or longer than 200000 characters.",
+	"surface": "codemode",
+	"mutating": false,
+	"input": {
+		"type": "object",
+		"properties": { "text": { "type": "string", "maxLength": 200000, "description": "The text to count." } },
+		"required": ["text"],
+		"additionalProperties": false
+	},
+	"output": {
+		"type": "object",
+		"properties": {
+			"words": { "type": "integer" },
+			"lines": { "type": "integer" },
+			"characters": { "type": "integer" }
+		},
+		"required": ["words", "lines", "characters"]
+	},
+	"run": { "kind": "script", "entry": "count_words.mjs" }
+}

@@ -1,0 +1,1 @@
+{ "tool": "count_words", "name": "two lines", "input": { "text": "Hello world.\nSecond line here." }, "expected": { "words": 5, "lines": 2, "characters": 30 } }

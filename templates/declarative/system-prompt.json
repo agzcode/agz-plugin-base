@@ -1,0 +1,10 @@
+{
+	"all": [
+		{
+			"op": "add",
+			"section": "working",
+			"id": "my-plugin.review-evidence",
+			"text": "- When you review code, name the file and line of every finding."
+		}
+	]
+}

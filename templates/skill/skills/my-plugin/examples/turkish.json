@@ -1,0 +1,1 @@
+{ "tool": "count_words", "name": "Turkish letters count as one character each", "input": { "text": "Çalışkan öğrenci" }, "expected": { "words": 2, "lines": 1, "characters": 16 } }
