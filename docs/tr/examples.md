@@ -14,7 +14,7 @@ Açık depo `agzcode/agz-plugin-base`, her katkı türü için bir şablon ve ta
 | `mcp-server` | Manifestte bildirilen, uzantı kodu gerektirmeyen MCP sunucusu (`mcpServers`). | `date-tools` |
 | `project-settings` | Proje kapsamlı alanı olan bir ayar formu (`settings`, `scope: "project"`). | `commit-style` |
 | `storage` | Eklentinin kendi veri klasörü (`getPluginPaths()`). | `snippets` |
-| `declarative` | Kodsuz: bir ajan, bir istem şablonu, bir bot şablonu, bir sistem istemi düzenlemesi ve bir simge. | `review-kit`, `release-notes` |
+| `declarative` | Kodsuz: bir ajan, bir istem şablonu, bir bot şablonu katkısı, bir sistem istemi düzenlemesi ve bir simge. | `review-kit`, `release-notes` |
 
 Manifestin `themes` alanının şablonu yoktur: yükleyici tema dosyalarını çözer, ama masaüstü uygulaması onları uygulamaz.
 
@@ -53,12 +53,12 @@ Ajan çalıştırmadan önce tehlikeli kabuk komutlarını engeller. Klasör: `e
 
 ## Release Notes
 
-Son etiketten sonraki commit başlıklarından sürüm notu taslağı yazar. Klasör: `examples/release-notes`. Uzantı kodu yoktur: manifesti bir beceri, bir sistem istemi dosyası ve bir bot şablonu bildirir.
+Son etiketten sonraki commit başlıklarından sürüm notu taslağı yazar. Klasör: `examples/release-notes`. Uzantı kodu yoktur: manifesti bir beceri, bir sistem istemi dosyası ve `contributes["agz/bots/templates"]` altında bir bot şablonu bildirir.
 
 - Beceri `skills/release-notes`, türü `routed`, İngilizce ve Türkçe tetikleyici ifadelerle. `git log <etiket>..HEAD` başlıklarını okur, `group_commits` aracına verir, sonra taslağı düzenler.
 - Araç `group_commits`: girdi `subjects` (en fazla 2000 metin, her biri en fazla 500 karakter); çıktı `markdown`, `sections` ve `ignored`. Değiştirmez ve dosya okumaz. Conventional Commits'i Added, Fixed, Changed, Documentation ve Other bölümlerine ayırır, kırıcı değişiklikleri başa koyar ve `chore`, `test`, `ci`, `build` ile `style` commit'lerini yok sayılanlar arasına koyar. Betiği `skills/release-notes/scripts/group_commits.mjs` dosyasıdır.
 - Sistem istemi dosyası `system-prompt.json`: `working` bölümüne tek bir `add` işlemi, kimlik `release-notes.grounding`. Ajana, yalnızca okuduğu geçmişteki değişiklikleri yazmasını söyler.
-- Bot şablonu `weekly-notes`, adı `release-notes-bot`, özeti `bots/weekly-notes.md`. Önerilen onay `report`: taslağı yazar ve bildirir; kullanıcı bir dosya adı verdiğinde yalnızca o dosyayı yazar.
+- Bot şablonu `weekly-notes`, adı `release-notes-bot`, özeti `{ "$file": "bots/weekly-notes.md" }`. Önerilen onay `report`: taslağı yazar ve bildirir; kullanıcı bir dosya adı verdiğinde yalnızca o dosyayı yazar.
 
 ## Uptime Monitor
 

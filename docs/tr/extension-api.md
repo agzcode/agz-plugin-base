@@ -242,12 +242,16 @@ Görünüm, bloklardan oluşan bölümlerdir; uygulama her bloğu kendi bileşen
 | `chart` | Aynı noktalar üzerinde en çok 5 serili `line`, `area` ya da `bar` grafiği (`x` noktaları adlandırır). |
 | `ring` | Bir bütünün payı, halka olarak. |
 | `button`, `form`, `link` | Bir eylem, ayar alanlarından oluşan bir form, uygulamanın dışarıda açtığı bir http(s) bağlantısı. |
+| `htmlFrame` | Pasif, yalıtılmış HTML önizlemesi: en çok 65.536 karakterlik `html`, isteğe bağlı 48–800 arası `height` ve `title`. Betikler ve ağ erişimi engellenir; uygulama çizim yüksekliğini 96–480 piksele sınırlar. |
+| `action` | Uygulamanın eklenti eylemini çağırmadan kendisinin işlediği düğme: `label` ve `action` nesnesi. |
+
+`action` nesnesi `{ type: "openSession", sessionId }`, `{ type: "prefillComposer", sessionId, text }` (1–8.000 karakter; mesajı göndermez) veya `{ type: "inspectEntry", sessionId, entryId }` (salt okunur) biçimindedir. Hedef oturum aynı canlı motor bağlantısında olmalıdır; yoksa düğme devre dışıdır. `htmlFrame` ve `action` deneyseldir; etkileşim için HTML önizlemesini değil bildirimsel kontrolleri kullanın. `form` içindeki `string` alanı `multiline: true` ile çok satırlı çizilebilir.
 
 `title` değeri olan ve `collapsed: true` verilen bölüm, kullanıcı açana kadar kapalı çizilir.
 
 `place: "composer"` ile bildirilen görünüm burada, bir `panel` görünümü gibi kaydedilir ve eklentiyi yükleyen oturumlarda oturumun mesaj kutusunun hemen üstünde küçük bir çubuk olarak çizilir. Durumu da bloğu da olmayan görünüm hiçbir şey çizmez; hiçbir görünümün gösterecek bir şeyi yokken çubuk yer kaplamaz. Düğmeleri ve formları mesaj kutusunu hiçbir zaman göndermez.
 
-`place: "statusbar"` ile bildirilen görünüm burada kaydedilmez: onu eklentinin motor modülü kaydeder; ayrıntısı [manifest](./manifest.md#durum-cubugu-gorunumleri) sayfasındadır.
+`place: "statusbar"`, `"session"` veya `"settings"` ile bildirilen görünümler burada kaydedilmez: onları eklentinin motor modülü kaydeder; ayrıntısı [manifest](./manifest.md#oturum-ve-ayar-gorunumleri) sayfasındadır.
 
 ### Ayarlar
 

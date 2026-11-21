@@ -43,4 +43,4 @@ Bots are agents that outlive a single session. Each has its own folder, memory a
 - **Fixed bot:** a bot with one session and one folder. It does its job from the instructions in its `BOT.md` file.
 - **Memory maintenance bot:** merges duplicate records, splits mixed ones and restores records deleted by mistake.
 
-A plugin can bring a bot template, but no bot is created until you approve it.
+A plugin can contribute a bot template under `contributes["agz/bots/templates"]`, with its brief as a package-relative `{ "$file": "..." }`; the `agz/bots` plugin uses it, but no bot is created until you approve it.

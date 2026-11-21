@@ -101,12 +101,13 @@ describe("the system prompt edit", () => {
 
 describe("the bot template", () => {
 	it("names a brief file that exists and tells the bot to use the skill", () => {
-		const [template] = manifest.bots ?? [];
-		assert.equal(manifest.bots?.length, 1);
+		const templates = manifest.contributes?.["agz/bots/templates"] as Array<{ name: string; suggestedApproval: string; brief: { $file: string } }>;
+		assert.equal(templates.length, 1);
+		const [template] = templates;
 		assert.ok(template !== undefined);
 		assert.match(template.name, /^[a-z][a-z0-9-]{1,47}$/);
 		assert.equal(template.suggestedApproval, "report");
-		const brief = readFileSync(join(root, template.brief), "utf8");
+		const brief = readFileSync(join(root, template.brief.$file), "utf8");
 		assert.ok(brief.trim().length > 0 && brief.length <= 20_000);
 		assert.match(brief, /group_commits/);
 	});

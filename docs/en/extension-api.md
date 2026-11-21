@@ -242,12 +242,16 @@ A view is sections of blocks; the app draws each block with its own components, 
 | `chart` | A `line`, `area` or `bar` chart of up to 5 series over the same points (`x` names them). |
 | `ring` | A share of a whole as a ring. |
 | `button`, `form`, `link` | An action, a form of settings fields, an http(s) link the app opens outside. |
+| `htmlFrame` | A passive, sandboxed HTML preview: `html` up to 65,536 characters, optional `height` 48–800 and `title`. Scripts and network access are blocked; the app clamps the displayed height to 96–480 pixels. |
+| `action` | A button the app handles itself, without a plugin action call: `label` and an `action` object. |
+
+An `action` object is `{ type: "openSession", sessionId }`, `{ type: "prefillComposer", sessionId, text }` (1–8,000 characters; it does not send the message), or `{ type: "inspectEntry", sessionId, entryId }` (read-only). The target session must be on the same live engine connection; otherwise the button is disabled. `htmlFrame` and `action` are experimental; use declarative controls for interaction, not the HTML preview. A `form` string field can set `multiline: true` to show a multiline input.
 
 A section with a `title` and `collapsed: true` is drawn closed until the user opens it.
 
 A view declared with `place: "composer"` is registered here like a panel view and drawn as a compact bar right above the session's composer, in the sessions that load the plugin. A view with no status and no blocks draws nothing, and the bar takes no room until one view has something to show. Its buttons and forms never submit the composer.
 
-A view declared with `place: "statusbar"` is not registered here: the plugin's engine module registers it, as described in [the manifest](./manifest.md#status-bar-views).
+Views declared with `place: "statusbar"`, `"session"` or `"settings"` are not registered here: the plugin's engine module registers them, as described in [the manifest](./manifest.md#session-and-settings-views).
 
 ### Settings
 

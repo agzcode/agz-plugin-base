@@ -25,18 +25,18 @@
 		"agents": ["agents/my-plugin-reviewer.md"],
 		"prompts": ["prompts"],
 		"systemPrompt": "system-prompt.json",
-		"bots": [
-			{
+		"contributes": {
+			"agz/bots/templates": [{
 				"id": "reviewer",
 				"name": "my-plugin-bot",
 				"description": {
 					"en": "Reviews the changes of the project's current branch and reports what it found.",
 					"tr": "Projenin geçerli dalındaki değişiklikleri inceler ve bulduklarını bildirir."
 				},
-				"brief": "bots/reviewer.md",
+				"brief": { "$file": "bots/reviewer.md" },
 				"suggestedPermissions": "May read the project's files and its git history. Changes nothing.",
 				"suggestedApproval": "report"
-			}
-		]
+			}]
+		}
 	}
 }

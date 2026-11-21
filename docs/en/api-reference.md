@@ -1,6 +1,6 @@
 # API reference
 
-The contract of `@agz-yazilim/plugin-sdk`, version 1.4.0: every name the package exports, with its signature and its TSDoc. Members of the host's own API object that are not listed here are outside the contract; see [compatibility](./compatibility.md).
+The contract of `@agz-yazilim/plugin-sdk`, version 1.5.0: every name the package exports, with its signature and its TSDoc. Members of the host's own API object that are not listed here are outside the contract; see [compatibility](./compatibility.md).
 
 ## Runtime
 
@@ -67,7 +67,7 @@ interface PluginModelProviderModel
 The version of this SDK, equal to the `version` of its package.json. A plugin's `engines["agz-plugin-sdk"]` range is checked against it. A new optional member of the contract is a minor version; removing or changing one is a major.
 
 ```ts
-declare const SDK_VERSION: "1.4.0";
+declare const SDK_VERSION: "1.5.0";
 ```
 
 ### Static
@@ -491,6 +491,12 @@ interface ToolDefinition<TParams extends TSchema = TSchema, TDetails = unknown>
 
   Restricts the tool to main sessions when set to `"main"`.
 
+- `ownedSessionsOnly?: boolean`
+
+  > **Experimental: the API may change or be withdrawn in any release**
+
+  Expose and run this tool only in a named session owned by its plugin.
+
 - `exposure?: ToolExposure`
 
   How the model reaches the tool. Default: `"direct"`.
@@ -710,6 +716,12 @@ interface PluginCommandContext extends PluginContext
 
   Resolves when the agent has finished its running turn.
 
+- `owner?: { readonly plugin: string; readonly name: string; }`
+
+  > **Experimental: the API may change or be withdrawn in any release**
+
+  The calling plugin's owned session, when this extension belongs to its owner.
+
 - `ui: PluginUIContext`
 
   Asks the user for input and shows notifications.
@@ -751,6 +763,12 @@ interface PluginContext
 ```
 
 **Members**
+
+- `owner?: { readonly plugin: string; readonly name: string; }`
+
+  > **Experimental: the API may change or be withdrawn in any release**
+
+  The calling plugin's owned session, when this extension belongs to its owner.
 
 - `ui: PluginUIContext`
 
@@ -968,6 +986,12 @@ interface ToolContext extends PluginContext
 
   Runs another tool through the same validation, hooks and checks as a call of the model. It does not reject when the tool fails: unknown tools, invalid arguments, blocked calls and thrown errors come back with `isError: true`.
 
+- `owner?: { readonly plugin: string; readonly name: string; }`
+
+  > **Experimental: the API may change or be withdrawn in any release**
+
+  The calling plugin's owned session, when this extension belongs to its owner.
+
 - `ui: PluginUIContext`
 
   Asks the user for input and shows notifications.
@@ -1143,6 +1167,12 @@ interface BeforeAgentStartEventResult
 - `systemPrompt?: string`
 
   Replaces the whole system prompt for this run. Later handlers see the replacement.
+
+- `sections?: Record<string, string>`
+
+  > **Experimental: the API may change or be withdrawn in any release**
+
+  Named sections for this plugin's owned session.
 
 ### BeforeAgentStartUserEvent
 
@@ -1903,48 +1933,6 @@ type PluginBinaryTarget = | "linux-x64"
 	| "android-arm64"
 ```
 
-### PluginBotApproval
-
-Whether a bot made from a template reports to the user or finishes on its own.
-
-```ts
-type PluginBotApproval = "report" | "final"
-```
-
-### PluginBotTemplate
-
-A bot the user may create in Settings > Bots; never a live bot.
-
-```ts
-interface PluginBotTemplate
-```
-
-**Members**
-
-- `id: string`
-
-  Unique within the plugin.
-
-- `name: string`
-
-  The bot's name: a lowercase letter, then 1 to 47 lowercase letters, digits or hyphens.
-
-- `description: LocalizedText`
-
-  What the bot does.
-
-- `brief: string`
-
-  Package-relative path of the `BOT.md` text that briefs the bot.
-
-- `suggestedPermissions?: string`
-
-  Suggested permissions for the bot.
-
-- `suggestedApproval?: PluginBotApproval`
-
-  Suggested approval mode.
-
 ### PluginManifest
 
 The `agzPlugin` field of a plugin's `package.json`. Resource paths are relative to the package root.
@@ -2035,10 +2023,6 @@ interface PluginManifest
 
   UI the app draws for the plugin.
 
-- `bots?: PluginBotTemplate[]`
-
-  Bot templates the user can turn into a bot.
-
 - `access?: AccessName[]`
 
   > **Experimental: the API may change or be withdrawn in any release**
@@ -2103,10 +2087,17 @@ interface PluginSettingEnumOption
 
 ### PluginSettingField
 
-One field of `agzPlugin.settings`; also the field vocabulary of a view's `form` block. The type decides the value: `string`, `number`, `boolean` and `enum` store a value (with an optional default); a `secret` is write-only: it has no default and the app never shows it again, only its last characters.
+One field of `agzPlugin.settings`; also the field vocabulary of a view's `form` block. The type decides the value: `string`, `number`, `boolean` and `enum` store a value (with an optional default); a `secret` is write-only: it has no default and the app never shows it again, only its last characters. A string field may request a multiline input.
 
 ```ts
-type PluginSettingField = | (PluginSettingBase & { type: "string"; default?: string; maxLength?: number })
+type PluginSettingField = | (PluginSettingBase & {
+			type: "string";
+			default?: string;
+			/** Maximum UTF-16 length: 1–4096, or 1–32768 when multiline is true. Defaults to 4096. */
+			maxLength?: number;
+			/** A text area for several lines instead of a one-line input. */
+			multiline?: boolean;
+	  })
 	| (PluginSettingBase & { type: "number"; default?: number; min?: number; max?: number; integer?: boolean })
 	| (PluginSettingBase & { type: "boolean"; default?: boolean })
 	| (PluginSettingBase & { type: "enum"; options: PluginSettingEnumOption[]; default?: string })
@@ -2223,7 +2214,7 @@ interface PluginUserContent
 
 ### PluginViewDeclaration
 
-A view the plugin may register with PluginAPI.registerView (a `statusbar` view: with the engine module's `registerView`).
+A view the plugin may register with PluginAPI.registerView (one at an engine place: with the engine module's `registerView`).
 
 ```ts
 interface PluginViewDeclaration
@@ -2315,10 +2306,10 @@ type PluginViewIcon = | "activity"
 
 ### PluginViewPlace
 
-Where the app shows a view. `panel`: a tab of a session's right panel. `sidebar`: a page of a project. `statusbar`: an item in the app's status bar with a panel that opens from it; such a view belongs to the engine, not to a session, so the plugin's engine module (`agzPlugin.engine`) registers it. `composer`: a bar above a session's composer; an empty render hides it.
+Where the app shows a view. `panel`: a tab of a session's right panel. `sidebar`: a page of a project. `composer`: a bar above a session's composer; an empty render hides it. `statusbar` (an item in the app's status bar with a panel that opens from it), `session` (a part of a session's screen) and `settings` (a part of the plugin's settings page) belong to the engine, not to a session, so the plugin's engine module (`agzPlugin.engine`) registers them.
 
 ```ts
-type PluginViewPlace = "panel" | "sidebar" | "statusbar" | "composer"
+type PluginViewPlace = "panel" | "sidebar" | "statusbar" | "composer" | "session" | "settings"
 ```
 
 ### ToolAccessName
@@ -2858,6 +2849,22 @@ type PluginViewBlock = | (BlockBase & {
 			/** http or https only; the app opens it externally and shows the host. */
 			url: string;
 	  }
+	| (BlockBase & {
+			/** The plugin's own page, drawn in a frame kept apart from the app. Experimental: it may change in a minor SDK version. */
+			kind: "htmlFrame";
+			/** The whole page (at most 65536 characters); the app draws no script of it. */
+			html: string;
+			/** Pixels, 48 to 800. */
+			height?: number;
+			title?: PluginText;
+	  })
+	| (BlockBase & {
+			/** A button whose click the app runs itself, without asking the plugin. Experimental: it may change in a minor SDK version. */
+			kind: "action";
+			label: PluginText;
+			/** What the app runs: no `plugins.view.action` round trip. */
+			action: PluginViewClientAction;
+	  })
 ```
 
 ### PluginViewButtonVariant
@@ -2884,6 +2891,18 @@ How a `chart` block draws its series.
 type PluginViewChartType = "line" | "area" | "bar"
 ```
 
+### PluginViewClientAction
+
+> **Experimental: the API may change or be withdrawn in any release**
+
+What an `action` block runs in the app: open a session, put `text` into its composer (at most 8000 characters), or show one of its transcript entries.
+
+```ts
+type PluginViewClientAction = | { type: "openSession"; sessionId: string }
+	| { type: "prefillComposer"; sessionId: string; text: string }
+	| { type: "inspectEntry"; sessionId: string; entryId: string }
+```
+
 ### PluginViewContext
 
 What `render` and `action` receive.
@@ -2905,6 +2924,12 @@ interface PluginViewContext
 - `statusOnly?: boolean`
 
   A status bar view whose panel is closed: only `status` is shown, so `render` may return no sections.
+
+- `session?: { readonly sessionId: string; readonly name: string; }`
+
+  > **Experimental: the API may change or be withdrawn in any release**
+
+  The plugin's own session a view declared with `place: "session"` is rendered for: the session's id and the name the app shows it under. Absent for a view at any other place.
 
 - `signal: AbortSignal`
 

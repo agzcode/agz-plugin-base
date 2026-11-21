@@ -1,6 +1,6 @@
 # API referansı
 
-`@agz-yazilim/plugin-sdk` sözleşmesi, sürüm 1.4.0: paketin dışa aktardığı her ad, imzası ve TSDoc açıklamasıyla. Burada yer almayan ev sahibi API nesnesi üyeleri sözleşmenin dışındadır; bkz. [uyumluluk](./compatibility.md).
+`@agz-yazilim/plugin-sdk` sözleşmesi, sürüm 1.5.0: paketin dışa aktardığı her ad, imzası ve TSDoc açıklamasıyla. Burada yer almayan ev sahibi API nesnesi üyeleri sözleşmenin dışındadır; bkz. [uyumluluk](./compatibility.md).
 
 ## Çalışma zamanı
 
@@ -67,7 +67,7 @@ interface PluginModelProviderModel
 Bu SDK'nın sürümü; `package.json` dosyasının `version` alanıyla aynıdır. Bir eklentinin `engines["agz-plugin-sdk"]` aralığı buna göre denetlenir. Sözleşmeye eklenen yeni isteğe bağlı bir üye küçük sürüm; bir üyeyi kaldırmak ya da değiştirmek büyük sürümdür.
 
 ```ts
-declare const SDK_VERSION: "1.4.0";
+declare const SDK_VERSION: "1.5.0";
 ```
 
 ### Static
@@ -491,6 +491,12 @@ interface ToolDefinition<TParams extends TSchema = TSchema, TDetails = unknown>
 
   main olduğunda araç yalnız ana oturumlarda kullanılabilir.
 
+- `ownedSessionsOnly?: boolean`
+
+  > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+  Aracı yalnız eklentisinin sahip olduğu adlandırılmış oturumlarda sunar ve çalıştırır.
+
 - `exposure?: ToolExposure`
 
   Modelin araca hangi yoldan ulaştığı. Varsayılan: `"direct"`.
@@ -710,6 +716,12 @@ interface PluginCommandContext extends PluginContext
 
   Ajan çalışan turunu bitirdiğinde çözülür.
 
+- `owner?: { readonly plugin: string; readonly name: string; }`
+
+  > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+  Bu uzantının eklentisine ait adlandırılmış oturumun sahibi; diğer oturumlarda yoktur.
+
 - `ui: PluginUIContext`
 
   Kullanıcıdan girdi ister ve bildirimleri gösterir.
@@ -751,6 +763,12 @@ interface PluginContext
 ```
 
 **Üyeler**
+
+- `owner?: { readonly plugin: string; readonly name: string; }`
+
+  > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+  Bu uzantının eklentisine ait adlandırılmış oturumun sahibi; diğer oturumlarda yoktur.
 
 - `ui: PluginUIContext`
 
@@ -968,6 +986,12 @@ interface ToolContext extends PluginContext
 
   Başka bir aracı, modelin çağrısıyla aynı doğrulama, kanca ve denetimlerden geçirerek çalıştırır. Araç başarısız olduğunda reddetmez: bilinmeyen araçlar, geçersiz argümanlar, engellenen çağrılar ve fırlatılan hatalar `isError: true` ile döner.
 
+- `owner?: { readonly plugin: string; readonly name: string; }`
+
+  > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+  Bu uzantının eklentisine ait adlandırılmış oturumun sahibi; diğer oturumlarda yoktur.
+
 - `ui: PluginUIContext`
 
   Kullanıcıdan girdi ister ve bildirimleri gösterir.
@@ -1143,6 +1167,12 @@ interface BeforeAgentStartEventResult
 - `systemPrompt?: string`
 
   Bu çalışma için bütün sistem istemini değiştirir. Sonraki işleyiciler değişikliği görür.
+
+- `sections?: Record<string, string>`
+
+  > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+  Bu eklentinin sahip olduğu oturum için adlandırılmış bölümler.
 
 ### BeforeAgentStartUserEvent
 
@@ -1899,48 +1929,6 @@ type PluginBinaryTarget = | "linux-x64"
 	| "android-arm64"
 ```
 
-### PluginBotApproval
-
-Bir şablondan yapılan botun kullanıcıya bildirim verip vermeyeceği ya da kendi başına bitip bitmeyeceği.
-
-```ts
-type PluginBotApproval = "report" | "final"
-```
-
-### PluginBotTemplate
-
-Kullanıcının Ayarlar > Botlar bölümünden oluşturabileceği bir bot; asla canlı bir bot değildir.
-
-```ts
-interface PluginBotTemplate
-```
-
-**Üyeler**
-
-- `id: string`
-
-  Eklenti içinde benzersiz.
-
-- `name: string`
-
-  Botun adı: küçük harfle başlayan, ardından 1 ila 47 küçük harf, rakam ya da tire.
-
-- `description: LocalizedText`
-
-  Botun ne yaptığı.
-
-- `brief: string`
-
-  Botu yönlendiren `BOT.md` metninin paket içindeki yolu.
-
-- `suggestedPermissions?: string`
-
-  Bot için önerilen izinler.
-
-- `suggestedApproval?: PluginBotApproval`
-
-  Önerilen onay kipi.
-
 ### PluginManifest
 
 Bir eklentinin `package.json` dosyasındaki `agzPlugin` alanı. Kaynak yolları paket köküne göredir.
@@ -2031,10 +2019,6 @@ interface PluginManifest
 
   Uygulamanın eklenti için çizdiği arayüz.
 
-- `bots?: PluginBotTemplate[]`
-
-  Kullanıcının bota dönüştürebileceği bot şablonları.
-
 - `access?: AccessName[]`
 
   > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
@@ -2102,7 +2086,14 @@ interface PluginSettingEnumOption
 `agzPlugin.settings` alanlarından biri; aynı zamanda bir görünümün `form` bloğunun alan sözcüğüdür. Tür değeri belirler: `string`, `number`, `boolean` ve `enum` bir değer saklar (isteğe bağlı bir varsayılanla); `secret` yalnızca yazılabilirdir: varsayılanı yoktur ve uygulama onu bir daha göstermez, yalnızca son karakterlerini gösterir.
 
 ```ts
-type PluginSettingField = | (PluginSettingBase & { type: "string"; default?: string; maxLength?: number })
+type PluginSettingField = | (PluginSettingBase & {
+			type: "string";
+			default?: string;
+			/** Maximum UTF-16 length: 1–4096, or 1–32768 when multiline is true. Defaults to 4096. */
+			maxLength?: number;
+			/** A text area for several lines instead of a one-line input. */
+			multiline?: boolean;
+	  })
 	| (PluginSettingBase & { type: "number"; default?: number; min?: number; max?: number; integer?: boolean })
 	| (PluginSettingBase & { type: "boolean"; default?: boolean })
 	| (PluginSettingBase & { type: "enum"; options: PluginSettingEnumOption[]; default?: string })
@@ -2219,7 +2210,7 @@ interface PluginUserContent
 
 ### PluginViewDeclaration
 
-Eklentinin `PluginAPI.registerView` ile kaydedebileceği bir görünüm (`statusbar` görünümü: motor modülünün `registerView` işleviyle).
+Eklentinin `PluginAPI.registerView` ile kaydedebileceği bir görünüm (motor yerindeki bir görünüm: motor modülünün `registerView` işleviyle).
 
 ```ts
 interface PluginViewDeclaration
@@ -2311,10 +2302,10 @@ type PluginViewIcon = | "activity"
 
 ### PluginViewPlace
 
-Uygulamanın bir görünümü nerede gösterdiği. `panel`: oturumun sağ panelindeki bir sekme. `sidebar`: projenin bir sayfası. `statusbar`: uygulamanın durum çubuğunda bir öğe ve ondan açılan panel; böyle bir görünüm bir oturuma değil motora aittir, bu yüzden onu eklentinin motor modülü (`agzPlugin.engine`) kaydeder. `composer`: oturumun yazma alanının üstünde bir çubuk; boş çizim onu gizler.
+Uygulamanın bir görünümü nerede gösterdiği. `panel`: oturumun sağ panelindeki bir sekme. `sidebar`: projenin bir sayfası. `composer`: oturumun yazma alanının üstünde bir çubuk; boş çizim onu gizler. `statusbar` (uygulamanın durum çubuğunda bir öğe ve ondan açılan panel), `session` (bir oturum ekranının bir parçası) ve `settings` (eklentinin ayarlar sayfasının bir parçası) bir oturuma değil motora aittir, bu yüzden onları eklentinin motor modülü (`agzPlugin.engine`) kaydeder.
 
 ```ts
-type PluginViewPlace = "panel" | "sidebar" | "statusbar" | "composer"
+type PluginViewPlace = "panel" | "sidebar" | "statusbar" | "composer" | "session" | "settings"
 ```
 
 ### ToolAccessName
@@ -2854,6 +2845,22 @@ type PluginViewBlock = | (BlockBase & {
 			/** http or https only; the app opens it externally and shows the host. */
 			url: string;
 	  }
+	| (BlockBase & {
+			/** The plugin's own page, drawn in a frame kept apart from the app. Experimental: it may change in a minor SDK version. */
+			kind: "htmlFrame";
+			/** The whole page (at most 65536 characters); the app draws no script of it. */
+			html: string;
+			/** Pixels, 48 to 800. */
+			height?: number;
+			title?: PluginText;
+	  })
+	| (BlockBase & {
+			/** A button whose click the app runs itself, without asking the plugin. Experimental: it may change in a minor SDK version. */
+			kind: "action";
+			label: PluginText;
+			/** What the app runs: no `plugins.view.action` round trip. */
+			action: PluginViewClientAction;
+	  })
 ```
 
 ### PluginViewButtonVariant
@@ -2880,6 +2887,18 @@ Bir `chart` bloğunun serilerini nasıl çizdiği.
 type PluginViewChartType = "line" | "area" | "bar"
 ```
 
+### PluginViewClientAction
+
+> **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+Bir `action` bloğunun uygulamada çalıştırdığı: bir oturumu açar, yazma alanına `text` koyar (en çok 8000 karakter) ya da oturumun konuşma dökümündeki bir girdiyi gösterir.
+
+```ts
+type PluginViewClientAction = | { type: "openSession"; sessionId: string }
+	| { type: "prefillComposer"; sessionId: string; text: string }
+	| { type: "inspectEntry"; sessionId: string; entryId: string }
+```
+
 ### PluginViewContext
 
 `render` ve `action` işlevlerinin aldıkları.
@@ -2901,6 +2920,12 @@ interface PluginViewContext
 - `statusOnly?: boolean`
 
   Paneli kapalı bir durum çubuğu görünümü: yalnız `status` gösterilir, bu yüzden `render` bölüm döndürmeyebilir.
+
+- `session?: { readonly sessionId: string; readonly name: string; }`
+
+  > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
+
+  `place: "session"` ile bildirilen görünümün çizildiği eklenti oturumu: oturumun kimliği ve uygulamanın onu gösterdiği ad. Başka bir yerdeki görünümde bulunmaz.
 
 - `signal: AbortSignal`
 

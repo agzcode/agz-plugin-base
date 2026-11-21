@@ -43,4 +43,4 @@ Botlar oturumun ötesinde kalan ajanlardır: her birinin kendi klasörü, hafız
 - **Sabit bot:** Tek bir oturumu ve tek bir klasörü olan bot. İşini kendi `BOT.md` dosyasındaki talimatlarla yapar.
 - **Hafıza bakım botu:** Hafızadaki kopyaları birleştirir, karışık kayıtları ayırır ve yanlış silinenleri geri getirir.
 
-Bir eklenti bot şablonu getirebilir, ama sen onaylamadan bot oluşmaz.
+Bir eklenti `contributes["agz/bots/templates"]` altında, özeti paket göreli `{ "$file": "..." }` olan bir bot şablonu sunabilir; bunu `agz/bots` eklentisi kullanır, ama sen onaylamadan bot oluşmaz.

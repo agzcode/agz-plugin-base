@@ -14,7 +14,7 @@ The open repository `agzcode/agz-plugin-base` holds a template and a complete ex
 | `mcp-server` | An MCP server declared in the manifest, without extension code (`mcpServers`). | `date-tools` |
 | `project-settings` | A settings form with a project-scoped field (`settings`, `scope: "project"`). | `commit-style` |
 | `storage` | The plugin's own data folder (`getPluginPaths()`). | `snippets` |
-| `declarative` | No code: an agent, a prompt template, a bot template, a system prompt edit and an icon. | `review-kit`, `release-notes` |
+| `declarative` | No code: an agent, a prompt template, a bot template contribution, a system prompt edit and an icon. | `review-kit`, `release-notes` |
 
 The manifest's `themes` field has no template: the loader resolves theme files, but the desktop app does not apply them.
 
@@ -53,12 +53,12 @@ Blocks dangerous shell commands before the agent runs them. Folder: `examples/co
 
 ## Release Notes
 
-Drafts release notes from the commit subjects since the last tag. Folder: `examples/release-notes`. It has no extension code: its manifest declares a skill, a system prompt file and a bot template.
+Drafts release notes from the commit subjects since the last tag. Folder: `examples/release-notes`. It has no extension code: its manifest declares a skill, a system prompt file and a bot template in `contributes["agz/bots/templates"]`.
 
 - Skill `skills/release-notes`, of kind `routed`, with trigger phrases in English and Turkish. It reads the subjects of `git log <tag>..HEAD` and passes them to `group_commits`, then edits the draft.
 - Tool `group_commits`: input `subjects` (up to 2000 strings of at most 500 characters); output `markdown`, `sections` and `ignored`. It is not mutating and reads no file. It groups Conventional Commits into Added, Fixed, Changed, Documentation and Other, lists breaking changes first, and counts `chore`, `test`, `ci`, `build` and `style` commits as ignored. Its script is `skills/release-notes/scripts/group_commits.mjs`.
 - System prompt file `system-prompt.json`: one `add` operation in the `working` section, id `release-notes.grounding`. It tells the agent to write only the changes it found in the history it read.
-- Bot template `weekly-notes`, named `release-notes-bot`, with the brief `bots/weekly-notes.md`. Its suggested approval is `report`: it drafts the notes and reports them, and writes a file only when the user names one.
+- Bot template `weekly-notes`, named `release-notes-bot`, with the brief `{ "$file": "bots/weekly-notes.md" }`. Its suggested approval is `report`: it drafts the notes and reports them, and writes a file only when the user names one.
 
 ## Uptime Monitor
 
