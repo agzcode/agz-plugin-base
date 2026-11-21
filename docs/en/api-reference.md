@@ -2023,6 +2023,10 @@ interface PluginManifest
 
   UI the app draws for the plugin.
 
+- `contributes?: Record<string, PluginJson>`
+
+  JSON data for other plugins, keyed `<plugin id>/<key>` (at most 16 keys, 64 KiB each), for example `"agz/bots/templates"`. An object holding only `$file` names a package-relative UTF-8 file. The addressed plugin reads it with `engine.contributions(key)`.
+
 - `access?: AccessName[]`
 
   > **Experimental: the API may change or be withdrawn in any release**

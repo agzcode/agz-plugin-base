@@ -2,7 +2,7 @@
 	"files": {
 		"docs/docs.json": "dff8ca562f74dfb7171d4072245f858e6a55a8d017315e83c3bfaba5034372be",
 		"docs/en/agents.md": "25edb0b4e16db4531820e5b1b91decfa9508d0f9251299e4dfd467899ff035f9",
-		"docs/en/api-reference.md": "abd768f03902e1045b13057b52d410c82c33b72741c04a325b8b8ca1a5cb8f17",
+		"docs/en/api-reference.md": "5f2389ee967d97a2bb631679047442d6c0ece3263a06ff7dbd652811844c9b34",
 		"docs/en/compatibility.md": "347bb9d82f277018a1b55a5773bcbec6375d8d1a357384bc3ac4e674259d570e",
 		"docs/en/convert-feature.md": "980d61fa4f0e3dc5115ecc1eb721750caaaf3ad835ee0b2ca7a3f0d9566d0f26",
 		"docs/en/convert-git-project.md": "793a372b42dea73030c83288cb674922e5c0c94376bf6f3f4721f74a6b78ae4e",
@@ -18,7 +18,7 @@
 		"docs/en/storage.md": "1d95ec3118dd8769fbfa1a764afba0e62b503cfc2634f9a97e45b5402b1a1d89",
 		"docs/en/testing.md": "cbcab7ac4ad53260cbb81e497bae7f87138b0fac76119f5ca9fdb96059d7e4f4",
 		"docs/tr/agents.md": "0645ffd155f62a18d470fa35eb45929a071399537a50d9d3d179f5beb7a44fac",
-		"docs/tr/api-reference.md": "ed11bc1d59ba7bb03c7fb1a1a19ca70aa54ea37530c3c6e857e89803b85fd737",
+		"docs/tr/api-reference.md": "917b07d98cad1734c5595e75a51be482bc35e68204aa9d3763a9ceab8826463a",
 		"docs/tr/compatibility.md": "7aee8f440df6e77bd244c65b5eeb3a7d0289cb8ac92db7a2773967fc3edbc96a",
 		"docs/tr/convert-feature.md": "2e9e1ee3f43c6a4f097a4122a9caf2648daa6b659f49778eb77191d6f8722194",
 		"docs/tr/convert-git-project.md": "6d18fe3a0c935d981693ebf0e3b9d4fc9c7b69565642b1ecb46f1d2de85666a5",

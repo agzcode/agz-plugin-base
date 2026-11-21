@@ -2019,6 +2019,10 @@ interface PluginManifest
 
   Uygulamanın eklenti için çizdiği arayüz.
 
+- `contributes?: Record<string, PluginJson>`
+
+  Başka eklentiler için `<eklenti kimliği>/<anahtar>` anahtarlı JSON verisi (en çok 16 anahtar, her biri 64 KiB), örneğin `"agz/bots/templates"`. Yalnız `$file` tutan bir nesne paket içindeki bir UTF-8 dosyasını gösterir. Hedef eklenti bunu `engine.contributions(key)` ile okur.
+
 - `access?: AccessName[]`
 
   > **Deneysel: API herhangi bir sürümde değişebilir ya da kaldırılabilir**
