@@ -32,8 +32,8 @@ Beceri şablonundan manifest:
 		"test": "agz plugin test"
 	},
 	"devDependencies": {
-		"@agz-yazilim/plugin-kit": "1.4.0",
-		"@agz-yazilim/plugin-sdk": "1.4.0",
+		"@agz-yazilim/plugin-kit": "1.5.0",
+		"@agz-yazilim/plugin-sdk": "1.5.0",
 		"@types/node": "22.19.19",
 		"typescript": "7.0.2"
 	},

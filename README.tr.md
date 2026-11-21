@@ -13,7 +13,7 @@ Node.js 22.19 ya da daha yenisi ve AGZ Code masaüstü uygulaması gerekir.
 ```sh
 mkdir my-work && cd my-work
 npm init -y
-npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.4.0
+npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.5.0
 npx agz plugin create notes-helper --id acme/notes-helper
 cd notes-helper
 npm install --ignore-scripts
@@ -65,7 +65,7 @@ Türkçe belgeler [`docs/tr`](./docs/tr), İngilizce belgeler [`docs/en`](./docs
 
 ## Sürümler
 
-Şablon ve örnekler npm'deki [`@agz-yazilim/plugin-sdk@1.4.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-sdk/v/1.4.0) ve [`@agz-yazilim/plugin-kit@1.4.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-kit/v/1.4.0) sürümlerini kullanır. Masaüstü arayüz modülleri için [`@agz-yazilim/plugin-ui@0.1.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-ui/v/0.1.0) kullanın. Üç paket de MIT lisanslıdır. Uygulamanın SDK sürümü, eklentinin `engines["agz-plugin-sdk"]` aralığına uymalıdır; bkz. [Uyumluluk](./docs/tr/compatibility.md).
+Şablon ve örnekler npm'deki [`@agz-yazilim/plugin-sdk@1.5.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-sdk/v/1.5.0) ve [`@agz-yazilim/plugin-kit@1.5.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-kit/v/1.5.0) sürümlerini kullanır. Masaüstü arayüz modülleri için [`@agz-yazilim/plugin-ui@0.1.0`](https://www.npmjs.com/package/@agz-yazilim/plugin-ui/v/0.1.0) kullanın. Üç paket de MIT lisanslıdır. Uygulamanın SDK sürümü, eklentinin `engines["agz-plugin-sdk"]` aralığına uymalıdır; bkz. [Uyumluluk](./docs/tr/compatibility.md).
 
 SDK 1.4.0 şunları ekler: yalnız ana oturumda sunulan araçlar (`scope: "main"`), [`ctx.agents.run`](./docs/tr/extension-api.md#paket-ajanını-çalıştırma) ile paket ajanı çalıştırma, pakete özel ve yalnız yanıt veren ajan profilleri ([ajan tanımları](./docs/tr/manifest.md#ajan-tanımları)) ve ajan görünümlü araç kartları (`card: "agent"`, `as: "markdown"` bölümleri). Kit 1.4.0'ın sahte ev sahibi ajan koşularını taklit eder: `createMockHost` çağrısına bir `agents` yanıtlayıcısı verin ve doğrulanan çağrıları `host.agentRuns` üzerinden okuyun. Bunlardan birini kullanan eklenti `^1.4.0` bildirir.
 

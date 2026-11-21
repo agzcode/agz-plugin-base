@@ -13,7 +13,7 @@ In an empty folder of your own, run `npm init -y` first: without a `package.json
 
 ```sh
 npm init -y
-npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.4.0
+npm install --save-dev --save-exact --ignore-scripts @agz-yazilim/plugin-kit@1.5.0
 npx agz plugin create notes-helper --kind skill+extension --id acme/notes-helper
 cd notes-helper
 npm install --ignore-scripts

@@ -12,8 +12,8 @@
 		"test": "agz plugin check"
 	},
 	"devDependencies": {
-		"@agz-yazilim/plugin-kit": "1.4.0",
-		"@agz-yazilim/plugin-sdk": "1.4.0"
+		"@agz-yazilim/plugin-kit": "1.5.0",
+		"@agz-yazilim/plugin-sdk": "1.5.0"
 	},
 	"agzPlugin": {
 		"schemaVersion": 1,
